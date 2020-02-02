@@ -16,7 +16,7 @@ const generators = {
 
       public String handleRequest(JsonObject event, Context context) {
         ${className} instance = new ${className}();
-        JsonObject res = ${className}.${cliArgs['--entry-method']}(event);
+        JsonObject res = instance.${cliArgs['--entry-method']}(event);
         return new Gson().toJson(res);
       }
     }
