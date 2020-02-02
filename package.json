@@ -1,7 +1,7 @@
 {
-  "name": "js2faas",
+  "name": "java2faas",
   "version": "0.0.6",
-  "description": "Tiny API to run JS on any FaaS",
+  "description": "Tiny API to run Java on any FaaS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,7 +9,7 @@
   "author": "qngapparat <jakob.wallnoefer@outlook.com>",
   "license": "MIT",
   "bin": {
-    "js2faas": "./cli.js"
+    "java2faas": "./cli.js"
   },
   "dependencies": {
     "arg": "^4.1.2",

@@ -1,6 +1,6 @@
-# js2faas
+# java2faas
 
-JS Transpiler to run your code on both Google & Amazon FaaS
+Java Transpiler to run your code on both Amazon & IBM FaaS
 
 ## Install
 ```shell

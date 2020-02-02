@@ -1,20 +1,24 @@
 const { runGenerators } = require('./common')
-
+const path = require('path')
 // A generator is a function that takes the user-inpuzt CLI args and produces some source code
 const generators = {
-  '_index.js': function (cliArgs) {
+  'Entry.java': function (cliArgs) {
+    // TODO better name for entry-class
+    // TODO improve this
+    const className = cliArgs['--entry-class'].split(path.sep).slice(-1)[0].split('.')[0]
     return `
-    exports.handler = function runUserFunc(first, second, third, fourth) {
-                              
-      const userFunc = require('./${cliArgs['--entry-file']}')
-       // run user function with 'event'
-      let res;
-      try {
-        res = userFunc(first)
-      } catch(e) {
-        second.fail(e)
+    import com.amazonaws.services.lambda.runtime.RequestHandler;
+    import com.amazonaws.services.lambda.runtime.Context;
+    import com.google.gson.JsonObject;
+    import com.google.gson.Gson;
+
+    public class Entry implements RequestHandler<JsonObject, String> {
+
+      public String handleRequest(JsonObject event, Context context) {
+        Hello instance = new Hello();
+        JsonObject res = ${className}.${cliArgs['--entry-method']}(event);
+        return new Gson().toJson(res);
       }
-      second.succeed(res)
     }
   `
   }
