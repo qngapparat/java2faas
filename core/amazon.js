@@ -25,16 +25,20 @@ function amazon (cliArgs) {
 
   // eg. src/main/java/Hello.java
   // OR  src.main.java.Hello
-  const splitEntryPath = cliArgs['--entry-class'].split(path.sep)
-  const codeDir = path.join(cliArgs['--path'], 'amazon', ...splitEntryPath.slice(0, -1))
+  // const splitEntryPath = cliArgs['--entry-class'].split(path.sep)
+  // const codeDir = path.join(cliArgs['--path'], 'amazon', ...splitEntryPath.slice(0, -1))
 
   // write generated files
+
   const generated = generateAmazonCode(cliArgs)
-  generated.forEach(g => fs.writeFileSync(path.join(codeDir, g.fn), g.content))
+  generated.forEach(g => fs.writeFileSync(path.join(cliArgs['--path'], 'amazon', g.path), g.content))
 
   // write transfored files
-  const transformed = transformAmazonCode(cliArgs)
-  transformed.forEach(t => fs.writeFileSync(path.join(codeDir, t.fn), t.content))
+  // TODO first also adopt { content: ... path: ...}
+  // TODO then rewrite & uncomment this
+
+  // const transformed = transformAmazonCode(cliArgs)
+  // transformed.forEach(t => fs.writeFileSync(path.join(codeDir, t.fn), t.content))
 }
 
 module.exports = amazon

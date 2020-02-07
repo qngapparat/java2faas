@@ -3,6 +3,8 @@ const path = require('path')
 const { runTransformers } = require('./common')
 
 // A transformator is a function that takes the user-input CLI args, and mutates a file content string
+// TODO convert this to { code: ..., path: ...}
+
 const transformers = {
   // 'package.json': function (cliArgs, prevFileContent) {
   //   const prevO = JSON.parse(prevFileContent)

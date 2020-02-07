@@ -26,11 +26,13 @@ if (args['--path'] == null) {
 }
 
 if (args['--entry-class'] == null) {
+  // ie src/main/java/Hello.java
   console.log('Specify --entry-class')
   process.exit()
 }
 
 if (args['--entry-method'] == null) {
+  // ie handleRequest
   console.log('Specify --entry-method')
   process.exit()
 }
@@ -44,6 +46,5 @@ if (args['--aws-role'] == null) {
   console.log('Specify --aws-role')
   process.exit()
 }
-
 
 amazon(args)
