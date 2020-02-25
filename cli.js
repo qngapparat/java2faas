@@ -14,7 +14,7 @@ const arg = require('arg')
 
 const args = arg({
   '--path': String,
-  '--entry-class': String,
+  '--entry-file': String,
   '--entry-method': String,
   '--name': String,
   '--aws-role': String
@@ -25,9 +25,9 @@ if (args['--path'] == null) {
   process.exit()
 }
 
-if (args['--entry-class'] == null) {
+if (args['--entry-file'] == null) {
   // ie src/main/java/Hello.java
-  console.log('Specify --entry-class')
+  console.log('Specify --entry-file')
   process.exit()
 }
 

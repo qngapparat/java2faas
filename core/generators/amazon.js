@@ -3,9 +3,9 @@ const path = require('path')
 // A generator is a function that takes the user-inpuzt CLI args and produces some source code
 const generators = {
   'Entry.java': function (cliArgs) {
-    // TODO better name for entry-class
+    // TODO better name for entry-file
     // TODO improve this
-    const className = cliArgs['--entry-class'].split(path.sep).slice(-1)[0].split('.')[0]
+    const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
 
     return {
       code: `
@@ -24,7 +24,7 @@ const generators = {
       }
     `,
       // where that above should be written to                       // MUST correspond
-      path: path.join(...cliArgs['--entry-class'].split(path.sep).slice(0, -1), 'Entry.java')
+      path: path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1), 'Entry.java')
     }
   },
   // TODO would this overwrite user build files???

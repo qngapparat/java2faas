@@ -25,7 +25,7 @@ function amazon (cliArgs) {
 
   // eg. src/main/java/Hello.java
   // OR  src.main.java.Hello
-  // const splitEntryPath = cliArgs['--entry-class'].split(path.sep)
+  // const splitEntryPath = cliArgs['--entry-file'].split(path.sep)
   // const codeDir = path.join(cliArgs['--path'], 'amazon', ...splitEntryPath.slice(0, -1))
 
   // write generated files
