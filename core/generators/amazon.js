@@ -6,8 +6,8 @@ const generators = {
     // TODO better name for entry-file
     // TODO improve this
     const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
-    const reqClassName = cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
-    const resClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
+    const reqClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
+    const resClassName = cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
     return {
       code: `
       import com.amazonaws.services.lambda.runtime.RequestHandler;
