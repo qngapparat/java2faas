@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 
 const amazon = require('./core/amazon')
+const ibm = require('./core/ibm')
 
 // TODO ensure --name is alphanumeric (since we use it as export name for google)
 // TODO don't ask for role if only --google
@@ -62,3 +63,4 @@ if (args['--aws-role'] == null) {
 }
 
 amazon(args)
+ibm(args)
