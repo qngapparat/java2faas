@@ -15,8 +15,8 @@ const arg = require('arg')
 const args = arg({
   '--path': String,
   '--entry-file': String,
-  'request-file': String,
-  'response-file': String,
+  '--request-file': String,
+  '--response-file': String,
   '--entry-method': String,
   '--name': String,
   '--aws-role': String
