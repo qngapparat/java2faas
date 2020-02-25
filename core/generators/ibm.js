@@ -81,6 +81,8 @@ ibmcloud fn action create ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --ki
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
   }
+  // TODO update.sh Unable to create action '2502d': resource already exists (code 327eb03e704f696653383c69dfdf97f9)
+
 }
 /**
  *
