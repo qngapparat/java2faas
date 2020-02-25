@@ -5,18 +5,24 @@ const generators = {
   'Entry.java': function (cliArgs) {
     // // TODO better name for entry-file
     // // TODO improve this
-    // const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
-    // const reqClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
-    // const resClassName = cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
+    const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
+    const reqClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
+    const resClassName = cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
     return {
       code: `
      import com.google.gson.JsonObject;
 
      public class Entry {
        public static JsonObject main(JsonObject event) {
+        String eventStr = event.toString();
+        ${reqClassName} eventObj = new Gson().fromJson(eventStr, ${reqClassName}.class)
+        ${className} instance = new ${className}();
+        ${resClassName} res = instance.${cliArgs['--entry-method']}(event);
+
+        String resString = new Gson().toJson(res, ${resClassName}.class);
+        JsonObject resJsonObj = new Gson().fromJson(resString, JsonObject.class);
         
-        System.out.println(event);
-        return event;
+        return resJsonObj;
         // TODO serialize using response class
        }
      }
