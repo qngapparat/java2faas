@@ -1,6 +1,6 @@
 {
   "name": "java2faas",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Tiny API to run Java on any FaaS",
   "main": "index.js",
   "scripts": {
