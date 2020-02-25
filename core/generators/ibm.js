@@ -80,6 +80,17 @@ ibmcloud fn action create ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --ki
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
+  },
+
+  'update.sh': function (cliArgs) {
+    return {
+      code: `
+gradle jar
+cd ${path.join('build', 'libs')}
+ibmcloud fn action update ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --kind java:8 --main Entry
+      `,
+      path: path.join(cliArgs['--path'], 'update.sh')
+    }
   }
   // TODO update.sh Unable to create action '2502d': resource already exists (code 327eb03e704f696653383c69dfdf97f9)
 
