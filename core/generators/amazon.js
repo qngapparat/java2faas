@@ -15,7 +15,7 @@ const generators = {
   
       public class Entry implements RequestHandler<${reqClassName}, ${resClassName}> {
   
-        public String handleRequest(${reqClassName} event, Context context) {
+        public ${resClassName} handleRequest(${reqClassName} event, Context context) {
           ${className} instance = new ${className}();
           ${resClassName} res = instance.${cliArgs['--entry-method']}(event);
           return res;
