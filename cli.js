@@ -15,6 +15,8 @@ const arg = require('arg')
 const args = arg({
   '--path': String,
   '--entry-file': String,
+  'request-file': String,
+  'response-file': String,
   '--entry-method': String,
   '--name': String,
   '--aws-role': String
@@ -28,6 +30,18 @@ if (args['--path'] == null) {
 if (args['--entry-file'] == null) {
   // ie src/main/java/Hello.java
   console.log('Specify --entry-file')
+  process.exit()
+}
+
+if (args['--request-file'] == null) {
+  // ie src/main/java/Hello.java
+  console.log('Specify --request-file')
+  process.exit()
+}
+
+if (args['--response-file'] == null) {
+  // ie src/main/java/Hello.java
+  console.log('Specify --response-file')
   process.exit()
 }
 

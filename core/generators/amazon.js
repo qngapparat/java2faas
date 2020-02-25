@@ -6,20 +6,19 @@ const generators = {
     // TODO better name for entry-file
     // TODO improve this
     const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
-
+    const reqClassName = cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
+    const resClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
     return {
       code: `
       import com.amazonaws.services.lambda.runtime.RequestHandler;
       import com.amazonaws.services.lambda.runtime.Context;
-      import com.google.gson.JsonObject;
-      import com.google.gson.Gson;
   
-      public class Entry implements RequestHandler<JsonObject, String> {
+      public class Entry implements RequestHandler<${reqClassName}, ${resClassName}> {
   
-        public String handleRequest(JsonObject event, Context context) {
+        public String handleRequest(${reqClassName} event, Context context) {
           ${className} instance = new ${className}();
-          JsonObject res = instance.${cliArgs['--entry-method']}(event);
-          return new Gson().toJson(res);
+          ${resClassName} res = instance.${cliArgs['--entry-method']}(event);
+          return res;
         }
       }
     `,
