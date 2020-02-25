@@ -17,7 +17,7 @@ const generators = {
         String eventStr = event.toString();
         ${reqClassName} eventObj = new Gson().fromJson(eventStr, ${reqClassName}.class);
         ${className} instance = new ${className}();
-        ${resClassName} res = instance.${cliArgs['--entry-method']}(event);
+        ${resClassName} res = instance.${cliArgs['--entry-method']}(eventObj);
 
         String resString = new Gson().toJson(res, ${resClassName}.class);
         JsonObject resJsonObj = new Gson().fromJson(resString, JsonObject.class);
