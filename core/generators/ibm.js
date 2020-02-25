@@ -16,7 +16,7 @@ const generators = {
        public static JsonObject main(JsonObject event) {
         
         System.out.println(event);
-        return;
+        return event;
         // TODO serialize using response class
        }
      }
