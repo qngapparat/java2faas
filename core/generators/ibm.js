@@ -11,7 +11,7 @@ const generators = {
     return {
       code: `
      import com.google.gson.JsonObject;
-
+     import com.google.gson.Gson;
      public class Entry {
        public static JsonObject main(JsonObject event) {
         String eventStr = event.toString();
