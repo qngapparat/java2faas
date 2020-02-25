@@ -66,10 +66,21 @@ const generators = {
     return {
       code: `
 gradle build
-cd build/distributions
+cd ${path.join('build', 'distributions')}
 aws lambda create-function --function-name ${cliArgs['--name']} --handler Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role ${cliArgs['--aws-role']}
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
+    }
+  },
+
+  'update.sh': function (cliArgs) {
+    return {
+      code: `
+gradle build
+cd ${path.join('build', 'distributions')}
+aws lambda update-function-code --function-name ${cliArgs['--name']} --zip-file fileb://amazon.zip 
+      `,
+      path: path.join(cliArgs['--path'], 'update.sh')
     }
   }
 }
