@@ -69,8 +69,8 @@ dependencies {
       code: `
 gradle jar
 cd ${path.join('build', 'libs')}
-# TODO incorporate package name
-ibmcloud fn action create ${cliArgs['--name']} file --kind java:8 --main Entry
+# TODO incorporate package name             # TODO improve this
+ibmcloud fn action create ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --kind java:8 --main Entry
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
