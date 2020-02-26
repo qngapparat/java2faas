@@ -1,26 +1,28 @@
 # java2faas
 
-Java Transpiler to run your code on both Amazon & IBM FaaS
+Transpiler to run your Java code on both Amazon & IBM FaaS
 
 ## Install
 ```shell
-npm i js2faas -g
+npm i java2faas -g
 ```
 
 ## Basic Usage
 
 ```shell
-$ js2faas OPTIONS... 
+$ java2faas OPTIONS... 
   
   Options
     --path YOURAPPDIR 
     --name FUNCTIONNAME 
-    --runtime 'nodejs8' | 'nodejs10'
-    --entry-file FNAME # default-export your entry point in here
+    --entry-file FNAME 
+    --entry-method MNAME # Name of method inside entry-file
+    --request-file FNAME # Java file describing function input
+    --response-file FNAME # Java file describing function output
     --aws-role AWSROLEARN
 ```
 
-`js2faas` will transpile your JS code, and put it into the newly created directories `amazon` and `google`, respectively
+`java2faas` will transpile your Java code, and put it into the newly created directories `amazon` and `ibm`, respectively.
 
 ## Deploy your code
 
@@ -28,68 +30,151 @@ $ js2faas OPTIONS...
 
 ```shell
 cd amazon
-npm run create # afterwards, npm run update
+sh deploy.sh # afterwards, `sh update.sh`
 ```
 
-### To Google Cloud Functions
+### To IBM Functions
 
 ```shell
-cd google
-npm run deploy
+cd ibm
+sh deploy.sh # afterwards, `sh update.sh`
 ```
 
 
 ## Example
 
 ```
-├── index.js
-├── node_modules
-├── package.json
-└── package-lock.json
+.
+└── src
+    └── main
+        └── java
+            ├── Hello.java
+            ├── Request.java 
+            └── Response.java 
 ```
 
-Let's say your entry point is `index.js`:
-```js
-// default-export your entry point
-module.exports = (event) => {
- console.log(`Data passed: ${ event }`);
- return { a: 1, b: 2 }
+**Hello.java**
+
+A class containing the entry point of the cloud function
+
+```java
+// TODO amazon imports...
+import com.google.gson.JsonObject;
+import com.google.gson.Gson;
+
+// Class and method can have any name. Just specify it when running java2faas
+public class Hello {
+  public Response hello(Request inp) { 
+    String greetingString = String.format("Hello %s %s.", inp.firstName, inp.lastName);
+    return new Response(greetingString);
+  }
 }
 ```
 
-Run `js2faas`
+**Request.java**
+
+How the input to your cloud function will look. Make sure to include getters and setters.
+
+```java
+public class Request {
+  String firstName;
+  String lastName;
+
+  public String getFirstName() {
+      return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+      this.firstName = firstName;
+  }
+
+  public String getLastName() {
+      return lastName;
+  }
+
+  public void setLastName(String lastName) {
+      this.lastName = lastName;
+  }
+
+  public Request(String firstName, String lastName) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+  }
+
+  public Request() {
+  }
+}
+```
+
+**Response.java**
+
+How the output will look. Make sure to include getters and setters.
+
+```java
+public class Response {
+  String greetings;
+
+  public String getGreetings() {
+      return greetings;
+  }
+
+  public void setGreetings(String greetings) {
+      this.greetings = greetings;
+  }
+
+  public Response(String greetings) {
+      this.greetings = greetings;
+  }
+
+  public Response() {
+  }
+}
+```
+
+
+Run `java2faas`
 ```shell
-js2faas
-  --path . 
-  --name newFuncName
-  --entry-file index.js
-  --runtime nodejs10
-  --aws-role xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+java2faas
+    --path . 
+    --name myFirstFn 
+    --entry-file src/main/java/Hello.java 
+    --entry-method hello
+    --request-file src/main/java/Request.java
+    --response-file src/main/java/Response.java
+    --aws-role xxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 ```
-├── index.js
-├── node_modules
-├── package.json
-├── package-lock.json
-|
 ├── amazon
-└── google
+│   ├── build.gradle
+│   ├── deploy.sh
+│   ├── update.sh
+│   └── src/main/java
+├── ibm
+│   ├── build.gradle
+│   ├── deploy.sh
+│   ├── update.sh
+│   └── src/main/java
+└── src
+    └── main
+        └── java
+
 ```
 
 Deploy the function
 
 ```
 cd amazon
-npm run create
-
+sh deploy.sh
 # --
 
-cd google
-npm run deploy
-
+cd ibm
+sh deploy.sh
 ```
 
+## Misc
+
+* Only Gradle is supported as build system
 
 ## Licence
 

@@ -22,7 +22,7 @@ const generators = {
         }
       }
     `,
-      // where that above should be written to  (relative to project root)     // MUST correspond
+      // ??? not rlly where that above should be written to  (relative to project root)     // MUST correspond
       path: path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1), 'Entry.java')
     }
   },

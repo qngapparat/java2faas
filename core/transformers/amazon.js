@@ -6,30 +6,20 @@ const { runTransformers } = require('./common')
 // TODO convert this to { code: ..., path: ...}
 
 const transformers = {
-  // 'package.json': function (cliArgs, prevFileContent) {
-  //   const prevO = JSON.parse(prevFileContent)
-  //   const o = {
-  //     ...prevO,
-  //     scripts: { // TODO amazon only supports nodejs.10, 12, others 8 and 10, ...
-  //       ...prevO.scripts,
-  //       create: `zip -r deploypackage.zip * ; \
-  //         aws lambda create-function \
-  //          --function-name ${cliArgs['--name']} \
-  //          --runtime ${cliArgs['--runtime']}.x \
-  //          --handler _index.handler \
-  //          --role ${cliArgs['--aws-role']} \
-  //          --zip-file fileb://deploypackage.zip; \
-  //          rm deploypackage.zip
-  //          `,
-  //       update: `zip -r deploypackage.zip * ; \
-  //         aws lambda update-function-code \
-  //          --function-name ${cliArgs['--name']} \
-  //          --zip-file fileb://deploypackage.zip; \
-  //          rm deploypackage.zip
-  //         `
-  //     }
+  // '_UserEntryFile': function(cliArgs) {
+  //                       // account for second path being absolute or relative
+  //   const fPath = path.resolve(cliArgs['--path'], cliArgs['--entry-file'])
+  //   const fileContent = fs.readFileSync(fPath, { encoding: 'utf-8'})
+
+  //   let res = { 
+  //     code: fileContent,
+  //     path: path.resolve(cliArgs['--path'], cliArgs['--entry-file'])
   //   }
-  //   return JSON.stringify(o, null, 2)
+
+  //   // Ensure these two codelines are in there
+  //   [
+  //     ''
+  //   ]
   // }
 }
 
