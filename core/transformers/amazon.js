@@ -3,24 +3,85 @@ const path = require('path')
 const { runTransformers } = require('./common')
 
 // A transformator is a function that takes the user-input CLI args, and mutates a file content string
-// TODO convert this to { code: ..., path: ...}
-
 const transformers = {
-  // '_UserEntryFile': function(cliArgs) {
-  //                       // account for second path being absolute or relative
-  //   const fPath = path.resolve(cliArgs['--path'], cliArgs['--entry-file'])
-  //   const fileContent = fs.readFileSync(fPath, { encoding: 'utf-8'})
+  'build.gradle': function (cliArgs, prevCode) {
+    let code = prevCode || '';
+    // DEVNOTE: Using immediately-invoked function expressions (IIFE) to keep namespace clean
 
-  //   let res = { 
-  //     code: fileContent,
-  //     path: path.resolve(cliArgs['--path'], cliArgs['--entry-file'])
-  //   }
+    // APPLY PLUGIN JAVA FIELD
+    (() => {
+      const applypluginjava = code.match(/apply\s*plugin\s*:\s*'java'/)
+      if (!applypluginjava) {
+        code = `apply plugin: 'java'
+${code}
+        `
+      }
+    })();
 
-  //   // Ensure these two codelines are in there
-  //   [
-  //     ''
-  //   ]
-  // }
+    // REPOSITORY FIELD
+    (() => {
+      let repositories = code.match(/repositories\s*{[^}]*}/)
+      if (!repositories) {
+        code = `${code}\n repositories: { mavenCentral() }`
+        return
+      }
+      repositories = repositories[0]
+      if (!repositories.includes('mavenCentral')) {
+        code = code.replace(/repositories\s*{/, 'repositories { mavenCentral()\n')
+      }
+    })();
+
+    // DEPENDENCY FIELD
+    (() => {
+      let dependencies = code.match(/dependencies\s*{[^}]*}/)
+      if (!dependencies) { // write 'dependencies { ... }'
+        code = `${code}\n 
+dependencies {
+  compile (
+    'com.amazonaws:aws-lambda-java-core:1.2.0',
+    'com.amazonaws:aws-lambda-java-events:2.2.7'
+  )
+  compile 'com.google.code.gson:gson:2.6.2'
+}
+      `
+        return
+      }
+
+      dependencies = dependencies[0]
+      // prepend (by replacing 'dependencies {' with 'dependencies { CODE' )
+      // Note the lack of closing } in the replace logic => we keep user-specified deps
+      if (!dependencies.includes('amazonaws:aws-lambda-java')) {
+        code = code.replace(/dependencies\s*{/, `dependencies { 
+  compile (
+    'com.amazonaws:aws-lambda-java-core:1.2.0',
+    'com.amazonaws:aws-lambda-java-events:2.2.7'
+  )
+  compile 'com.google.code.gson:gson:2.6.2'
+  `
+        )
+      }
+    })();
+
+    // TASK FIELD
+    (() => {
+      code = `${code}\n
+task buildZip(type: Zip) {
+  from compileJava
+  from processResources
+  into('lib') {
+      from configurations.runtimeClasspath
+  }
+}
+
+build.dependsOn buildZip
+    `
+    })()
+
+    return {
+      code: code,
+      path: path.join(cliArgs['--path'], 'build.gradle')
+    }
+  }
 }
 
 function transformAll (cliArgs) {

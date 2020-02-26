@@ -26,39 +26,6 @@ const generators = {
       path: path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1), 'Entry.java')
     }
   },
-  // TODO would this overwrite user build files???
-
-  'build.gradle': function (cliArgs) {
-    return {
-      code: `
-      apply plugin: 'java'
-
-      repositories {
-          mavenCentral()
-      }
-      
-      dependencies {
-          compile (
-              'com.amazonaws:aws-lambda-java-core:1.2.0',
-              'com.amazonaws:aws-lambda-java-events:2.2.7'
-          )
-          compile 'com.google.code.gson:gson:2.6.2'
-      
-      }
-      
-      task buildZip(type: Zip) {
-          from compileJava
-          from processResources
-          into('lib') {
-              from configurations.runtimeClasspath
-          }
-      }
-      
-      build.dependsOn buildZip      
-      `,
-      path: path.join(cliArgs['--path'], 'build.gradle')
-    }
-  },
 
   // TODO we DO wanna overwrite here
   'deploy.sh': function (cliArgs) {

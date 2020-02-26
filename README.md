@@ -132,7 +132,8 @@ public class Response {
 ```
 
 
-Run `java2faas`
+**Run `java2faas`**
+
 ```shell
 java2faas
     --path . 
@@ -161,7 +162,7 @@ java2faas
 
 ```
 
-Deploy the function
+**Deploy the function**
 
 ```
 cd amazon
