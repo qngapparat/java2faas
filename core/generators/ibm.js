@@ -31,43 +31,6 @@ const generators = {
       path: path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1), 'Entry.java')
     }
   },
-  // TODO would this overwrite user build files???
-
-  'build.gradle': function (cliArgs) {
-    return {
-      code: `
-apply plugin: 'java'
-
-version = '1.0'
-
-repositories {
-   mavenCentral()
-}
-
-configurations {
-    provided
-    compile.extendsFrom provided
-}
-
-dependencies {
-     provided 'com.google.code.gson:gson:2.6.2'
-    compile 'com.google.zxing:core:3.3.0'
-     compile 'com.google.zxing:javase:3.3.0'
-}
-
- jar {
-    dependsOn configurations.runtime
-
-   from {
-        (configurations.runtime - configurations.provided).collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-} 
-      `,
-      path: path.join(cliArgs['--path'], 'build.gradle')
-    }
-  },
 
   // TODO we DO wanna overwrite here
   'deploy.sh': function (cliArgs) {
@@ -92,8 +55,6 @@ ibmcloud fn action update ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --ki
       path: path.join(cliArgs['--path'], 'update.sh')
     }
   }
-  // TODO update.sh Unable to create action '2502d': resource already exists (code 327eb03e704f696653383c69dfdf97f9)
-
 }
 /**
  *

@@ -28,9 +28,6 @@ function amazon (cliArgs) {
   // write transformed files
   const transformed = transformAmazonCode(cliArgs)
   transformed.forEach(t => fs.writeFileSync(path.join(cliArgs['--path'], 'amazon', t.path), t.content))
-
-  // const transformed = transformAmazonCode(cliArgs)
-  // transformed.forEach(t => fs.writeFileSync(path.join(codeDir, t.fn), t.content))
 }
 
 module.exports = amazon

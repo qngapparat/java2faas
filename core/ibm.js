@@ -5,6 +5,7 @@ const fse = require('fs-extra')
 const { copy } = require('./copiers')
 
 const generateIbmCode = require('./generators/ibm').generateAll
+const transformIbmCode = require('./transformers/ibm')
 /**
  *
  * Transpiles the user code to ibm/
@@ -33,11 +34,8 @@ function ibm (cliArgs) {
   generated.forEach(g => fs.writeFileSync(path.join(cliArgs['--path'], 'ibm', g.path), g.content))
 
   // write transfored files
-  // TODO first also adopt { content: ... path: ...}
-  // TODO then rewrite & uncomment this
-
-  // const transformed = transformIbmCode(cliArgs)
-  // transformed.forEach(t => fs.writeFileSync(path.join(codeDir, t.fn), t.content))
+  const transformed = transformIbmCode(cliArgs)
+  transformed.forEach(t => fs.writeFileSync(path.join(cliArgs['--path'], 'ibm', t.path), t.content))
 }
 
 module.exports = ibm
