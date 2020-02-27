@@ -5,7 +5,7 @@ const fse = require('fs-extra')
 const { copy } = require('./copiers')
 
 const generateIbmCode = require('./generators/ibm').generateAll
-const transformIbmCode = require('./transformers/ibm')
+const transformIbmCode = require('./transformers/ibm').transformAll
 /**
  *
  * Transpiles the user code to ibm/
