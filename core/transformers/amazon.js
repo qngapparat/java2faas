@@ -1,4 +1,3 @@
-const fs = require('fs')
 const path = require('path')
 const { runTransformers } = require('./common')
 
@@ -7,6 +6,7 @@ const { runTransformers } = require('./common')
 // A transformator is a function that takes the user-input CLI args, and mutates a file content string
 const transformers = {
   'build.gradle': function (cliArgs, prevCode) {
+    // TODO make sure it produces sufficient build.gralde with empty prevCode
     let code = prevCode || '';
     // DEVNOTE: Using immediately-invoked function expressions (IIFE) to keep namespace clean
 
