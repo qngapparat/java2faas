@@ -7,6 +7,14 @@ const { runTransformers } = require('./common')
  * @param {string} code The whole code string
  */
 
+// TODO DO WE REALLY NEED THIS??
+// we just do
+// * new writes
+// * head inserts ('repos {' => 'repos { DATA' )
+// and when matching we already match repos\s*{
+// we dont care about how nested user expr may be
+// there will every only be one 'repos\s*{' anyway
+
 // TODO test this
 function groovyMatch (code, sel) {
   // see if sel is even literally included
