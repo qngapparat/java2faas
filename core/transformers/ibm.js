@@ -55,7 +55,16 @@ dependencies {
   `
         )
       }
-    })();
+    })()
+
+    // CONFIGURATIONS FIELD
+    // TODO test if having this dupe hurts build.gradle
+    code = `${code}
+configurations {
+  provided
+  compile.extendsFrom provided
+}
+    `;
 
     // JAR FIELD
     (() => {
@@ -88,15 +97,6 @@ jar {
         `)
       }
     })()
-
-    // CONFIGURATIONS FIELD
-    // TODO test if having this dupe hurts build.gradle
-    code = `${code}
-configurations {
-  provided
-  compile.extendsFrom provided
-}
-    `
 
     return {
       code: code,
