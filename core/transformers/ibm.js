@@ -59,11 +59,13 @@ dependencies {
 
     // CONFIGURATIONS FIELD
     // TODO test if having this dupe hurts build.gradle
-    code = `${code}
+    code = `
 configurations {
   provided
   compile.extendsFrom provided
 }
+
+${code}
     `;
 
     // JAR FIELD
