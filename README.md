@@ -58,12 +58,9 @@ sh deploy.sh # afterwards, `sh update.sh`
 A class containing the entry point of the cloud function
 
 ```java
-// TODO amazon imports...
-import com.google.gson.JsonObject;
-import com.google.gson.Gson;
-
 // Class and method can have any name. Just specify it when running java2faas
 public class Hello {
+  
   public Response hello(Request inp) { 
     String greetingString = String.format("Hello %s %s.", inp.firstName, inp.lastName);
     return new Response(greetingString);
