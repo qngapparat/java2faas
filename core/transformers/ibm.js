@@ -4,10 +4,9 @@ const { runTransformers } = require('./common')
 // READ THE NOTES
 /// ////////////////////////////////
 
-// A transformator is a function that takes the user-input CLI args, and mutates a file content string (TLDR: it rewrites source code)
+// A transformator is a function that rewrites a file's content string (typically source code)
 const transformers = {
   /**
-   *
    * @param {string} cliArgs
    * @param {string} prevCode Previous code (content) of the file
    * @return {{code: string, path: string}} The new content of the file, and the path to save it to

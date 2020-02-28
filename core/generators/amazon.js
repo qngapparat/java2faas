@@ -1,33 +1,30 @@
 const { runGenerators } = require('./common')
 const path = require('path')
-// A generator is a function that takes the user-inpuzt CLI args and produces some source code
+// A generator is a function that takes the user-input CLI args and produces some source code
 const generators = {
   'Entry.java': function (cliArgs) {
-    // TODO better name for entry-file
-    // TODO improve this
+    // TODO improve this (??)
     const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
     const reqClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
     const resClassName = cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
     return {
       code: `
-      import com.amazonaws.services.lambda.runtime.RequestHandler;
-      import com.amazonaws.services.lambda.runtime.Context;
-  
-      public class Entry implements RequestHandler<${reqClassName}, ${resClassName}> {
-  
-        public ${resClassName} handleRequest(${reqClassName} event, Context context) {
-          ${className} instance = new ${className}();
-          ${resClassName} res = instance.${cliArgs['--entry-method']}(event);
-          return res;
-        }
-      }
+import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.Context;
+
+public class Entry implements RequestHandler<${reqClassName}, ${resClassName}> {
+
+  public ${resClassName} handleRequest(${reqClassName} event, Context context) {
+    ${className} instance = new ${className}();
+    ${resClassName} res = instance.${cliArgs['--entry-method']}(event);
+    return res;
+  }
+}
     `,
-      // ??? not rlly where that above should be written to  (relative to project root)     // MUST correspond
       path: path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1), 'Entry.java')
     }
   },
 
-  // TODO we DO wanna overwrite here
   'deploy.sh': function (cliArgs) {
     return {
       code: `
@@ -52,7 +49,7 @@ aws lambda update-function-code --function-name ${cliArgs['--name']} --zip-file 
 }
 /**
  *
- * @returns {[{content, path}]}
+ * @returns {[{code, path}]}
  */
 function generateAll (cliArgs) {
   return runGenerators(cliArgs, generators)

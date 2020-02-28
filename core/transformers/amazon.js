@@ -4,18 +4,15 @@ const { runTransformers } = require('./common')
 // READ THE NOTES
 /// ////////////////////////////////
 
-// A transformator is a function that takes the user-input CLI args, and mutates a file content string (TLDR: it rewrites source code)
+// A transformator is a function that rewrites a file's content string (typically source code)
 const transformers = {
   /**
-   * The transformator for the build.gradle file
    * @param {string} cliArgs
    * @param {string} prevCode Previous code (content) of the file
    * @return {{code: string, path: string}} The new content of the file, and the path to save it to
    */
   'build.gradle': function (cliArgs, prevCode) {
-    // TODO make sure it produces sufficient build.gralde with empty prevCode
     let code = prevCode || '';
-    // DEVNOTE: Using immediately-invoked function expressions (IIFE) to keep namespace clean
 
     // APPLY PLUGIN JAVA FIELD
     (() => {
@@ -41,7 +38,7 @@ const transformers = {
     // DEPENDENCY FIELD
     (() => {
       let dependencies = code.match(/dependencies\s*{[^}]*}/)
-      if (!dependencies) { // write 'dependencies { ... }'
+      if (!dependencies) {
         code = `${code}\n 
 dependencies {
   compile (
@@ -53,8 +50,6 @@ dependencies {
       `
       } else {
         dependencies = dependencies[0]
-        // prepend (by replacing 'dependencies {' with 'dependencies { CODE' )
-        // Note the lack of closing } in the replace logic => we keep user-specified deps
         if (!dependencies.includes('amazonaws:aws-lambda-java')) {
           code = code.replace(/dependencies\s*{/, `dependencies { 
 compile (

@@ -4,8 +4,8 @@ const { copy } = require('./copiers')
 
 const generateAmazonCode = require('./generators/amazon').generateAll
 const transformAmazonCode = require('./transformers/amazon').transformAll
+
 /**
- *
  * Transpiles the user code to amazon/
  * @param {*} cliArgs
  */
@@ -20,14 +20,12 @@ function amazon (cliArgs) {
   )
 
   // write generated files
-
   const generated = generateAmazonCode(cliArgs)
-  generated.forEach(g => fs.writeFileSync(path.join(cliArgs['--path'], 'amazon', g.path), g.content))
-  // TODO RENAME CONTENT TO CODE (=>consistent)
+  generated.forEach(g => fs.writeFileSync(path.join(cliArgs['--path'], 'amazon', g.path), g.code))
 
   // write transformed files
   const transformed = transformAmazonCode(cliArgs)
-  transformed.forEach(t => fs.writeFileSync(path.join(cliArgs['--path'], 'amazon', t.path), t.content))
+  transformed.forEach(t => fs.writeFileSync(path.join(cliArgs['--path'], 'amazon', t.path), t.code))
 }
 
 module.exports = amazon

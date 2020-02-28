@@ -3,7 +3,6 @@ const path = require('path')
 const fs = require('fs')
 
 /**
- *
  * @param {{*}} cliArgs
  * @param {{*}} transformersObj An object with keys: fns, values: { code: ..., path: ...} (path is relative to proj root and includes fn)
  */
@@ -18,12 +17,7 @@ function runTransformers (cliArgs, transformersObj) {
     }
   })
   const newContentsAndPaths = fns.map((fn, idx) => (transformersObj[fn])(cliArgs, prevFileContents[idx]))
-  return newContentsAndPaths.map(cap => {
-    return {
-      content: cap.code,
-      path: cap.path
-    }
-  })
+  return newContentsAndPaths
 }
 
 module.exports = {

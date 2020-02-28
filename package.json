@@ -1,7 +1,7 @@
 {
   "name": "java2faas",
   "version": "0.2.7",
-  "description": "Tiny API to run Java on any FaaS",
+  "description": "Transpiler to run Java code on ~any FaaS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

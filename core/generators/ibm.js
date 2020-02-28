@@ -58,7 +58,7 @@ ibmcloud fn action update ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --ki
 }
 /**
  *
- * @returns {[{content, path}]}
+ * @returns {[{code, path}]}
  */
 function generateAll (cliArgs) {
   return runGenerators(cliArgs, generators)

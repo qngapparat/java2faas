@@ -1,16 +1,8 @@
 #!/usr/bin/env node
-const fs = require('fs')
-const path = require('path')
-
 const amazon = require('./core/amazon')
 const ibm = require('./core/ibm')
 
-// TODO ensure --name is alphanumeric (since we use it as export name for google)
-// TODO don't ask for role if only --google
-// TODO handle the nodejs8/10/12 platform differing support (google 8 and 10, aws 10 and 12, ...)
-
-// TODO google, handly xml, multipart, etc https://cloud.google.com/functions/docs/writing/http
-
+// TODO handle java packages/package names
 const arg = require('arg')
 
 const args = arg({
@@ -55,6 +47,10 @@ if (args['--entry-method'] == null) {
 if (args['--name'] == null) {
   console.log('Specify --name')
   process.exit()
+}
+
+if (args['--name'].match(/^[a-zA-Z0-9]+$/) === false) {
+  console.log('--name must be alphanumeric (a-z A-Z 0-9)')
 }
 
 if (args['--aws-role'] == null) {

@@ -173,7 +173,7 @@ sh deploy.sh
 
 * Only Gradle is supported as build system
 * You can use dependencies just like before. Make sure you name it `build.gradle`.
-
+* Java 8 is used // TODO use latest per platform
 ## Licence
 
 MIT
