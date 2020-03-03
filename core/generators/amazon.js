@@ -14,7 +14,7 @@ const generators = {
     let packageCodeLine = fs.readFileSync(path.resolve(cliArgs['--path'], cliArgs['--entry-file']), { encoding: 'utf8' })
       .match(/package [^;]*;/)
     packageCodeLine = packageCodeLine
-      ? `package ${packageCodeLine[0]};\n`
+      ? packageCodeLine[0]
       : ''
 
     return {
