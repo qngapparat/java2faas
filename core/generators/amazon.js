@@ -11,7 +11,7 @@ const generators = {
     const resClassName = cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
     // Get the java package name of the user's entry file
     // fallback: ''
-    let packageCodeLine = fs.readFileSync(path.resolve(cliArgs['--path'], cliArgs['--entry-file']))
+    let packageCodeLine = fs.readFileSync(path.resolve(cliArgs['--path'], cliArgs['--entry-file']), { encoding: 'utf8' })
       .match(/package [^;]*;/)
     packageCodeLine = packageCodeLine
       ? `package ${packageCodeLine[0]};\n`
