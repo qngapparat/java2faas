@@ -3,6 +3,8 @@ const path = require('path')
 // A generator is a function that takes the user-inpuzt CLI args and produces some source code
 const generators = {
   'Entry.java': function (cliArgs) {
+    // TODO write import fields if specified entry point is in another package
+
     // // TODO better name for entry-file
     // // TODO improve this
     const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]

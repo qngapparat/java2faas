@@ -1,14 +1,25 @@
 const { runGenerators } = require('./common')
 const path = require('path')
+const fs = require('fs')
 // A generator is a function that takes the user-input CLI args and produces some source code
 const generators = {
   'Entry.java': function (cliArgs) {
+    // TODO write import fields if specified entry point is in another package
     // TODO improve this (??)
     const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
     const reqClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
     const resClassName = cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
+    // Get the java package name of the user's entry file
+    // fallback: ''
+    let packageCodeLine = fs.readFileSync(path.resolve(cliArgs['--path'], cliArgs['--entry-file']))
+      .match(/package [^;]*;/)
+    packageCodeLine = packageCodeLine
+      ? `package ${packageCodeLine[0]};\n`
+      : ''
+
     return {
       code: `
+${packageCodeLine}
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.Context;
 

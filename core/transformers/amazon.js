@@ -4,6 +4,9 @@ const { runTransformers } = require('./common')
 // READ THE NOTES
 /// ////////////////////////////////
 
+// TODO remove apply application/eclipse ??
+// TODO or is the programmer assumed to not write that there??
+
 // A transformator is a function that rewrites a file's content string (typically source code)
 const transformers = {
   /**
