@@ -16,7 +16,7 @@ const generators = {
     let packageCodeLine = fs.readFileSync(path.resolve(cliArgs['--path'], cliArgs['--entry-file']), { encoding: 'utf8' })
       .match(/package [^;]*;/)
 
-    let path
+    let buildPath
     // compute path
     if (packageCodeLine) {
       packageCodeLine = packageCodeLine[0]
@@ -27,19 +27,19 @@ const generators = {
         //  the relative path where a file with packageName is expected
       const relPackagePath = path.join(packageName.split('.'))
       // the desired path (eg src/main/java)
-      path = cliArgs['--entry-file']
+      buildPath = cliArgs['--entry-file']
         .replace(relPackagePath, '')
 
-      console.log(`Computed Java build path: ${path}`)
-      // desired path = user-specified entry file path MINUS relPackagePath
+      console.log(`Computed Java build path: ${buildPath}`)
+      // desired buildPath = user-specified entry file buildPath MINUS relPackagePath
       // eg:
-      // desired path = /src/main/java/com/example MINUS com/example
+      // desired buildPath  = /src/main/java/com/example MINUS com/example
       //              = /src/main/java
       // ( usually it's src/main/java but we cannot rely on that convention )
     } else {
       // user uses default package
       // => just place Entry.java in same flat directory with all the other .java files
-      path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1), 'Entry.java')
+      buildPath = path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1), 'Entry.java')
     }
 
     return {
@@ -60,7 +60,7 @@ public class Entry implements RequestHandler<${reqClassName}, ${resClassName}> {
 
       // TODO this isnt always the path we want to put entry.java ito
       //
-      path: path
+      path: buildPath
     }
   },
 
