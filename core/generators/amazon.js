@@ -27,7 +27,7 @@ const generators = {
         .trim()
       // eg. [..., 'src', 'main', 'java', 'com', 'example', 'Hello.java']
       buildPath = path.join(
-        cliArgs['--entry-file']
+        ...cliArgs['--entry-file']
           .split(path.sep)
           .slice(0, -1) // remove 'Hello.java'
           .join('.')
