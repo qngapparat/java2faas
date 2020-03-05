@@ -1,6 +1,6 @@
 {
   "name": "java2faas",
-  "version": "0.2.17",
+  "version": "0.2.18",
   "description": "Transpiler to run Java code on ~any FaaS",
   "main": "index.js",
   "scripts": {
