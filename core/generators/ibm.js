@@ -57,8 +57,8 @@ public class Entry {
       code: `
 gradle jar
 cd ${path.join('build', 'libs')}
-# TODO incorporate package name             # TODO improve this
-ibmcloud fn action create ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --kind java:8 --main Entry
+ # TODO improve this
+ibmcloud fn action create ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --kind java:8 --main ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
@@ -69,7 +69,7 @@ ibmcloud fn action create ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --ki
       code: `
 gradle jar
 cd ${path.join('build', 'libs')}
-ibmcloud fn action update ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --kind java:8 --main Entry
+ibmcloud fn action update ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --kind java:8 --main ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry
       `,
       path: path.join(cliArgs['--path'], 'update.sh')
     }
