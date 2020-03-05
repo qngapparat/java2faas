@@ -1,4 +1,8 @@
-const { runGenerators } = require('./common')
+const {
+  runGenerators,
+  getBuildPath,
+  getPackageName
+} = require('./common')
 const path = require('path')
 const fs = require('fs')
 // A generator is a function that takes the user-input CLI args and produces some source code
@@ -11,37 +15,14 @@ const generators = {
     const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
     const reqClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
     const resClassName = cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
-    // Get the java package name of the user's entry file
-    // fallback: ''
-    let packageCodeLine = fs.readFileSync(path.resolve(cliArgs['--path'], cliArgs['--entry-file']), { encoding: 'utf8' })
-      .match(/package [^;]*;/)
 
-    let buildPath
-    // compute path to save this file to
-    // (usually it's 'src/main/java')
-    if (packageCodeLine) {
-      packageCodeLine = packageCodeLine[0]
-      const packageName = packageCodeLine
-        .replace('package', '')
-        .replace(';', '')
-        .trim()
-      // eg. [..., 'src', 'main', 'java', 'com', 'example', 'Hello.java']
-      buildPath = path.join(
-        ...cliArgs['--entry-file']
-          .split(path.sep)
-          .slice(0, -1) // remove 'Hello.java'
-          .join('.')
-          .replace(packageName, '') // remove 'com.example'
-          .split('.')
-          .filter(dir => dir != null && dir.trim() !== ''),
-        'Entry.java'
-      )
-
-      console.log(`Computed Java build path: ${buildPath}`)
-    } else {
-      // user uses default package
-      // => just place Entry.java in same flat directory with all the other .java files
-      buildPath = path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1), 'Entry.java')
+    // usually src/main/java
+    const buildPath = getBuildPath(cliArgs)
+    // compute 'package ... ' codeline
+    const packageName = getPackageName(cliArgs)
+    let packageCodeLine = ''
+    if (packageName) {
+      packageCodeLine = `package ${packageName};\n`
     }
 
     return {
@@ -62,7 +43,7 @@ public class Entry implements RequestHandler<${reqClassName}, ${resClassName}> {
 
       // TODO this isnt always the path we want to put entry.java ito
       //
-      path: buildPath
+      path: path.join(buildPath, 'Entry.java')
     }
   },
 

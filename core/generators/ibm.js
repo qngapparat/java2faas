@@ -1,5 +1,11 @@
-const { runGenerators } = require('./common')
+const {
+  runGenerators,
+  getBuildPath,
+  getPackageName
+} = require('./common')
 const path = require('path')
+const fs = require('fs')
+
 // A generator is a function that takes the user-inpuzt CLI args and produces some source code
 const generators = {
   'Entry.java': function (cliArgs) {
@@ -10,27 +16,38 @@ const generators = {
     const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
     const reqClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
     const resClassName = cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
+
+    // usually src/main/java
+    const buildPath = getBuildPath(cliArgs)
+    // compute 'package ... ' codeline
+    const packageName = getPackageName(cliArgs)
+    let packageCodeLine = ''
+    if (packageName) {
+      packageCodeLine = `package ${packageName};\n`
+    }
+
     return {
       code: `
-     import com.google.gson.JsonObject;
-     import com.google.gson.Gson;
-     public class Entry {
-       public static JsonObject main(JsonObject event) {
-        String eventStr = event.toString();
-        ${reqClassName} eventObj = new Gson().fromJson(eventStr, ${reqClassName}.class);
-        ${className} instance = new ${className}();
-        ${resClassName} res = instance.${cliArgs['--entry-method']}(eventObj);
+${packageCodeLine}
+import com.google.gson.JsonObject;
+import com.google.gson.Gson;
+public class Entry {
+  public static JsonObject main(JsonObject event) {
+  String eventStr = event.toString();
+  ${reqClassName} eventObj = new Gson().fromJson(eventStr, ${reqClassName}.class);
+  ${className} instance = new ${className}();
+  ${resClassName} res = instance.${cliArgs['--entry-method']}(eventObj);
 
-        String resString = new Gson().toJson(res, ${resClassName}.class);
-        JsonObject resJsonObj = new Gson().fromJson(resString, JsonObject.class);
-        
-        return resJsonObj;
-        // TODO serialize using response class
-       }
-     }
+  String resString = new Gson().toJson(res, ${resClassName}.class);
+  JsonObject resJsonObj = new Gson().fromJson(resString, JsonObject.class);
+  
+  return resJsonObj;
+  // TODO serialize using response class
+  }
+}
     `,
       // where that above should be written to  (relative to project root)     // MUST correspond
-      path: path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1), 'Entry.java')
+      path: path.join(buildPath, 'Entry.java')
     }
   },
 
