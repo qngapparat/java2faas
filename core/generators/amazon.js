@@ -17,25 +17,27 @@ const generators = {
       .match(/package [^;]*;/)
 
     let buildPath
-    // compute path
+    // compute path to save this file to
+    // (usually it's 'src/main/java')
     if (packageCodeLine) {
       packageCodeLine = packageCodeLine[0]
       const packageName = packageCodeLine
         .replace('package', '')
         .replace(';', '')
         .trim()
-        //  the relative path where a file with packageName is expected
-      const relPackagePath = path.join(...packageName.split('.'))
-      // the desired path (eg src/main/java)
-      buildPath = cliArgs['--entry-file']
-        .replace(relPackagePath, '')
+      // eg. [..., 'src', 'main', 'java', 'com', 'example', 'Hello.java']
+      buildPath = path.join(
+        cliArgs['--entry-file']
+          .split(path.sep)
+          .slice(0, -1) // remove 'Hello.java'
+          .join('.')
+          .replace(packageName, '') // remove 'com.example'
+          .split('.')
+          .filter(dir => dir != null && dir.trim() !== ''),
+        'Entry.java'
+      )
 
       console.log(`Computed Java build path: ${buildPath}`)
-      // desired buildPath = user-specified entry file buildPath MINUS relPackagePath
-      // eg:
-      // desired buildPath  = /src/main/java/com/example MINUS com/example
-      //              = /src/main/java
-      // ( usually it's src/main/java but we cannot rely on that convention )
     } else {
       // user uses default package
       // => just place Entry.java in same flat directory with all the other .java files
