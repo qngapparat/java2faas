@@ -25,7 +25,7 @@ const generators = {
         .replace(';', '')
         .trim()
         //  the relative path where a file with packageName is expected
-      const relPackagePath = path.join(packageName.split('.'))
+      const relPackagePath = path.join(...packageName.split('.'))
       // the desired path (eg src/main/java)
       buildPath = cliArgs['--entry-file']
         .replace(relPackagePath, '')
