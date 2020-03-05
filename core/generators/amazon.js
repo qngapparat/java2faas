@@ -49,12 +49,14 @@ public class Entry implements RequestHandler<${reqClassName}, ${resClassName}> {
 
   // TODO region flag
 
+  // TODO incorporate user java package possibility
+
   'deploy.sh': function (cliArgs) {
     return {
       code: `
 gradle build
 cd ${path.join('build', 'distributions')}
-aws lambda create-function --function-name ${cliArgs['--name']} --handler Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role ${cliArgs['--aws-role']}
+aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role ${cliArgs['--aws-role']}
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
