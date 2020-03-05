@@ -2,6 +2,8 @@ const { runGenerators } = require('./common')
 const path = require('path')
 const fs = require('fs')
 // A generator is a function that takes the user-input CLI args and produces some source code
+
+// TODO global: path join => resolve
 const generators = {
   'Entry.java': function (cliArgs) {
     // TODO write import fields if specified entry point is in another package
@@ -13,9 +15,32 @@ const generators = {
     // fallback: ''
     let packageCodeLine = fs.readFileSync(path.resolve(cliArgs['--path'], cliArgs['--entry-file']), { encoding: 'utf8' })
       .match(/package [^;]*;/)
-    packageCodeLine = packageCodeLine
-      ? packageCodeLine[0]
-      : ''
+
+    let path
+    // compute path
+    if (packageCodeLine) {
+      packageCodeLine = packageCodeLine[0]
+      const packageName = packageCodeLine
+        .replace('package', '')
+        .replace(';', '')
+        .trim()
+        //  the relative path where a file with packageName is expected
+      const relPackagePath = path.join(packageName.split('.'))
+      // the desired path (eg src/main/java)
+      path = cliArgs['--entry-file']
+        .replace(relPackagePath, '')
+
+      console.log(`Computed Java build path: ${path}`)
+      // desired path = user-specified entry file path MINUS relPackagePath
+      // eg:
+      // desired path = /src/main/java/com/example MINUS com/example
+      //              = /src/main/java
+      // ( usually it's src/main/java but we cannot rely on that convention )
+    } else {
+      // user uses default package
+      // => just place Entry.java in same flat directory with all the other .java files
+      path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1), 'Entry.java')
+    }
 
     return {
       code: `
@@ -32,9 +57,14 @@ public class Entry implements RequestHandler<${reqClassName}, ${resClassName}> {
   }
 }
     `,
-      path: path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1), 'Entry.java')
+
+      // TODO this isnt always the path we want to put entry.java ito
+      //
+      path: path
     }
   },
+
+  // TODO region flag
 
   'deploy.sh': function (cliArgs) {
     return {
