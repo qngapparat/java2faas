@@ -52,6 +52,24 @@ public class Entry {
     }
   },
 
+  // TODO unite IBM / AWS region names
+
+  /*  IBM:
+  au-syd     Sydney
+in-che     Chennai
+jp-tok     Tokyo
+kr-seo     Seoul
+eu-de      Frankfurt
+eu-gb      London
+us-south   Dallas
+us-east    Washington DC
+
+*/
+
+  // TODO proper help + script usage
+
+  // TODO
+
   // TODO we DO wanna overwrite here
   'deploy.sh': function (cliArgs) {
     return {
