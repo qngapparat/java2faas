@@ -4,7 +4,6 @@ const {
   getPackageName
 } = require('./common')
 const path = require('path')
-const fs = require('fs')
 
 // A generator is a function that takes the user-inpuzt CLI args and produces some source code
 const generators = {
@@ -57,8 +56,7 @@ public class Entry {
       code: `
 gradle jar
 cd ${path.join('build', 'libs')}
- # TODO improve this
-ibmcloud fn action create ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --kind java:8 --main ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry
+ibmcloud fn action create ${cliArgs['--name']} ibm.jar --kind java:8 --main ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
@@ -69,7 +67,7 @@ ibmcloud fn action create ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --ki
       code: `
 gradle jar
 cd ${path.join('build', 'libs')}
-ibmcloud fn action update ${cliArgs['--name']} $(ls | grep ibm | head -n 1) --kind java:8 --main ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry
+ibmcloud fn action update ${cliArgs['--name']} ibm.jar --kind java:8 --main ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry
       `,
       path: path.join(cliArgs['--path'], 'update.sh')
     }

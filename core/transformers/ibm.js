@@ -89,6 +89,7 @@ jar {
           it.isDirectory() ? it : zipTree(it)
       }
   }
+  archiveName 'ibm.jar'
 }  
           `
       }
