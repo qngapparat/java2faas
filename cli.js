@@ -2,7 +2,6 @@
 const amazon = require('./core/amazon')
 const ibm = require('./core/ibm')
 
-// TODO handle java packages/package names
 const arg = require('arg')
 
 const args = arg({

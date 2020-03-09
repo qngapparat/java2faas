@@ -1,3 +1,4 @@
+// TODO add bash shebang
 
 const path = require('path')
 const fs = require('fs')

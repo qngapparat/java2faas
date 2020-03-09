@@ -10,7 +10,6 @@ const fs = require('fs')
 // TODO global: path join => resolve
 const generators = {
   'Entry.java': function (cliArgs) {
-    // TODO write import fields if specified entry point is in another package
     // TODO improve this (??)
     const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
     const reqClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
@@ -41,15 +40,11 @@ public class Entry implements RequestHandler<${reqClassName}, ${resClassName}> {
 }
     `,
 
-      // TODO this isnt always the path we want to put entry.java ito
-      //
       path: path.join(buildPath, 'Entry.java')
     }
   },
 
   // TODO region flag
-
-  // TODO incorporate user java package possibility
 
   'deploy.sh': function (cliArgs) {
     return {
