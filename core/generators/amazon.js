@@ -102,7 +102,7 @@ fi
 # Give aws the region flag only if user specified it
 [ -z "$parameterr" ] && REGIONSNIPPET="" || REGIONSNIPPET="--region $parameterr"
 
-aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role ${cliArgs['--aws-role']} --region "$REGIONSNIPPET"
+aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role ${cliArgs['--aws-role']}  "$REGIONSNIPPET"
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
