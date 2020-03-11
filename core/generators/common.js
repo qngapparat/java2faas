@@ -60,7 +60,7 @@ function getBuildPath (cliArgs) {
     console.log(`Computed Java build path: ${buildPath}`)
     return buildPath
   } else {
-    // user uses default package
+    // if user uses default package
     // => just place Entry.java in same flat directory with all the other .java files
     buildPath = path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1))
     return buildPath
