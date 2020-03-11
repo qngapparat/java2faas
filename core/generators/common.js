@@ -1,6 +1,8 @@
 const path = require('path')
 const fs = require('fs')
 
+// TODO allow omitting -request/response fpath if user names then Request/Response.
+
 /**
  * Run every gen in genereatorsObj with given cliArgs, return their output as array
  * @returns {[{code, path}]} Array of { fn: ..., code: ... }
