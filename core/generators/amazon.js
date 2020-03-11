@@ -102,7 +102,7 @@ fi
 # Give aws the region flag only if user specified it
 [ -z "$parameterr" ] && REGIONSNIPPET="" || REGIONSNIPPET="--region $parameterr"
 
-aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role ${cliArgs['--aws-role']}  "$REGIONSNIPPET"
+aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role ${cliArgs['--aws-role']}  $REGIONSNIPPET
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
@@ -160,7 +160,7 @@ cd ${path.join('build', 'distributions')}
 # Give aws the region flag only if user specified it
 
 [ -z "$parameterr" ] && REGIONSNIPPET="" || REGIONSNIPPET="--region $parameterr"
-aws lambda update-function-code --function-name ${cliArgs['--name']} --zip-file fileb://amazon.zip "$REGIONSNIPPET"
+aws lambda update-function-code --function-name ${cliArgs['--name']} --zip-file fileb://amazon.zip $REGIONSNIPPET
 
       `,
       path: path.join(cliArgs['--path'], 'update.sh')
