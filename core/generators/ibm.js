@@ -5,14 +5,11 @@ const {
 } = require('./common')
 const path = require('path')
 
-// TODO put gens in separate files
+// TODO ?? put gens in separate files
 
 // A generator is a function that takes the user-inpuzt CLI args and produces some source code
 const generators = {
   'Entry.java': function (cliArgs) {
-    // TODO write import fields if specified entry point is in another package
-
-    // // TODO better name for entry-file
     // // TODO improve this
     const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
     const reqClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
@@ -52,25 +49,7 @@ public class Entry {
     }
   },
 
-  // TODO unite IBM / AWS region names
-
-  /*  IBM:
-  au-syd     Sydney
-in-che     Chennai
-jp-tok     Tokyo
-kr-seo     Seoul
-eu-de      Frankfurt
-eu-gb      London
-us-south   Dallas
-us-east    Washington DC
-
-*/
-
   // TODO proper help + script usage
-
-  // TODO
-
-  // TODO we DO wanna overwrite here
   'deploy.sh': function (cliArgs) {
     return {
       code: `

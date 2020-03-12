@@ -5,7 +5,6 @@ const {
 } = require('./common')
 const path = require('path')
 const fs = require('fs')
-// TODO move more params from java2faas to deploy.sh (name, iam... ?)
 
 // A generator is a function that takes the user-input CLI args and produces some source code
 
@@ -48,9 +47,6 @@ public class Entry implements RequestHandler<${reqClassName}, ${resClassName}> {
     }
   },
 
-  // TODO region flag
-  // TODO login (u, p)
-  // TODO if no u,p specified still try
   // TODO shebang correct? really need bash (vs sh)
   'deploy.sh': function (cliArgs) {
     return {

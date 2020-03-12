@@ -31,7 +31,6 @@ $ java2faas OPTIONS...
 cd amazon
 sh deploy.sh --region eu2 # afterwards, `sh update.sh`
 
-// TODO not hardbaking secrets / login credentials
 ```
 
 ### To IBM Functions
