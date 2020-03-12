@@ -71,13 +71,15 @@ helpFunction()
    exit 1 # Exit script after printing help
 }
 
-while getopts "r:a:u::p::" opt
+while getopts "r:a:u::p::t::m::" opt
 do
    case "$opt" in
       r ) parameterr="$OPTARG" ;;
       a ) parametera="$OPTARG" ;;
       u ) parameteru="$OPTARG" ;;
       p ) parameterp="$OPTARG" ;;
+      t ) parametert="$OPTARG" ;;
+      m ) parameterm="$OPTARG" ;;
       ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
    esac
 done
@@ -100,6 +102,16 @@ fi
 gradle build
 cd ${path.join('build', 'distributions')}
 
+if [ -z "$parametert" ] 
+then 
+  echo "Info: -t TIMEOUT_SEC unspeficied. Using Amazon default.
+fi
+
+if [ -z "$parameterm" ] 
+then 
+  echo "Info: -m MEMORY_MB unspeficied. Using Amazon default.
+fi
+
 if [ -z "$parameteru" ] || [ -z "$parameterp" ]
 then
   echo "Info: -u AWS_SECRET_KEY_ID or -p AWS_SECRET_KEY or both unspecified. Proceeding without logging into AWS"
@@ -111,8 +123,10 @@ fi
 
 # Give aws the region flag only if user specified it
 [ -z "$parameterr" ] && REGIONSNIPPET="" || REGIONSNIPPET="--region $parameterr"
+[ -z "$parameterm" ] && MEMSNIPPET="" || MEMSNIPPET="--memory-size $parameterm"
+[ -z "$parametert" ] && TIMEOUTSNIPPET="" || TIMEOUTSNIPPET="--timeout $parametert"
 
-aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role $parametera $REGIONSNIPPET
+aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role $parametera $REGIONSNIPPET $MEMSNIPPET $TIMEOUTSNIPPET
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
