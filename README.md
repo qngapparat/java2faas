@@ -19,7 +19,6 @@ $ java2faas OPTIONS...
     --entry-method MNAME # Name of method inside entry-file
     --request-file FNAME # Java file describing function input
     --response-file FNAME # Java file describing function output
-    --aws-role AWSROLEARN
 ```
 
 `java2faas` will transpile your Java code, and put it into the newly created directories `amazon` and `ibm`, respectively.
@@ -140,7 +139,6 @@ java2faas
     --entry-method hello
     --request-file src/main/java/Request.java
     --response-file src/main/java/Response.java
-    --aws-role xxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 ```

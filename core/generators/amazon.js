@@ -5,6 +5,8 @@ const {
 } = require('./common')
 const path = require('path')
 const fs = require('fs')
+// TODO move more params from java2faas to deploy.sh (name, iam... ?)
+
 // A generator is a function that takes the user-input CLI args and produces some source code
 
 // TODO nice colored terminal log msgs (separate module)
@@ -69,10 +71,11 @@ helpFunction()
    exit 1 # Exit script after printing help
 }
 
-while getopts "r:u::p::" opt
+while getopts "r:a:u::p::" opt
 do
    case "$opt" in
       r ) parameterr="$OPTARG" ;;
+      a ) parametera="$OPTARG" ;;
       u ) parameteru="$OPTARG" ;;
       p ) parameterp="$OPTARG" ;;
       ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
@@ -83,6 +86,13 @@ done
 if [ -z "$parameterr" ] 
 then
    echo "Specify -r [us-east-2|us-west-1 ...]";
+   exit 1
+fi
+
+# Print helpFunction in case parameters are empty
+if [ -z "$parametera" ] 
+then
+   echo "Specify -a IAM_ROLE_AMAZON_ARN";
    exit 1
 fi
 
@@ -102,7 +112,7 @@ fi
 # Give aws the region flag only if user specified it
 [ -z "$parameterr" ] && REGIONSNIPPET="" || REGIONSNIPPET="--region $parameterr"
 
-aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role ${cliArgs['--aws-role']}  $REGIONSNIPPET
+aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role $parametera $REGIONSNIPPET
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
