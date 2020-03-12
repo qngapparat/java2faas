@@ -94,7 +94,7 @@ getCleanedArgs()
       SNIPPED="$SNIPPED $var"
   done
   
-  return "$SNIPPED"
+  getCleanedArgsRES="$SNIPPED"
 }
 
 
@@ -121,10 +121,10 @@ else
  AWS_ACCESS_KEY_ID="$parameteru" AWS_SECRET_ACCESS_KEY="$parameterp" aws ec2 describe-instances
 fi
 
+# run function, assigns result to getCleanedArgsRES (used below)
+getCleanedArgs
 
-CLEANEDAMAZONARGS=getCleanedArgs()
-
-aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 $CLEANEDAMAZONARGS
+aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 $getCleanedArgsRES
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
@@ -171,8 +171,7 @@ getCleanedArgs()
 
       SNIPPED="$SNIPPED $var"
   done
-  
-  return "$SNIPPED"
+  getCleanedArgsRES="$SNIPPED"
 }
 
 
@@ -198,9 +197,9 @@ fi
 gradle build
 cd ${path.join('build', 'distributions')}
 
-CLEANEDAMAZONARGS=getCleanedArgs()
+getCleanedArgs
 
-aws lambda update-function-code --function-name ${cliArgs['--name']} --zip-file fileb://amazon.zip $CLEANEDAMAZONARGS
+aws lambda update-function-code --function-name ${cliArgs['--name']} --zip-file fileb://amazon.zip $getCleanedArgsRES
       `,
       path: path.join(cliArgs['--path'], 'update.sh')
     }
