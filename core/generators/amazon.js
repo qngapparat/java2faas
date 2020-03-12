@@ -72,51 +72,42 @@ helpFunction()
    exit 1 # Exit script after printing help
 }
 
+
 # Assigns parameteru parameterp, parameterawsargs
-processArgs()
-{
-  NEXTISUSERNAME=false
-  NEXTISPASSWORD=false
-  parameterawsargs=""
-
-  for var in "$@"; do
-    if [ "$var" = '-u' ]
-    then
-      NEXTISUSERNAME=true
-      continue
-    fi
-
-    if [ "$var" = '-p' ]
-    then
-      NEXTISPASSWORD=true
-      continue
-    fi
-
-    if [ "$NEXTISUSERNAME" = true ]
-    then 
-      parameteru="$var"
-      NEXTISUSERNAME=false
-      continue
-    fi
-
-    if [ "$NEXTISPASSWORD" = true ]
-    then 
-      parameterp="$var"
-      NEXTISPASSWORD=false
-      continue
-    fi
-
-    # if not a java2faas arg, append to our AWS arg string
-    parameterawsargs="$parameterawsargs $var"
-  done
-
-  echo "parameterawsargs: "
-  echo "$parameterawsargs"
-}
 
 
-# run function to assign vars parameteru, parameterp and parameterawsargs used below
-processArgs
+NEXTISUSERNAME=false
+NEXTISPASSWORD=false
+parameterawsargs=""
+for var in "$@"; do
+  if [ "$var" = '-u' ]
+  then
+    NEXTISUSERNAME=true
+    continue
+  fi
+
+  if [ "$var" = '-p' ]
+  then
+    NEXTISPASSWORD=true
+    continue
+  fi
+
+  if [ "$NEXTISUSERNAME" = true ]
+  then 
+    parameteru="$var"
+    NEXTISUSERNAME=false
+    continue
+  fi
+
+  if [ "$NEXTISPASSWORD" = true ]
+  then 
+    parameterp="$var"
+    NEXTISPASSWORD=false
+    continue
+  fi
+  # if not a java2faas arg, append to our AWS arg string
+  parameterawsargs="$parameterawsargs $var"
+done
 
 gradle build
 cd ${path.join('build', 'distributions')}
@@ -130,7 +121,7 @@ else
  AWS_ACCESS_KEY_ID="$parameteru" AWS_SECRET_ACCESS_KEY="$parameterp" aws ec2 describe-instances
 fi
 
-aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 $paramterawsargs
+aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 $parameterawsargs
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
@@ -156,51 +147,42 @@ helpFunction()
     exit 1 # Exit script after printing help
 }
 
+
 # Assigns parameteru parameterp, parameterawsargs
-processArgs()
-{
-  NEXTISUSERNAME=false
-  NEXTISPASSWORD=false
-  parameterawsargs=""
-
-  for var in "$@"; do
-    if [ "$var" = '-u' ]
-    then
-      NEXTISUSERNAME=true
-      continue
-    fi
-
-    if [ "$var" = '-p' ]
-    then
-      NEXTISPASSWORD=true
-      continue
-    fi
-
-    if [ "$NEXTISUSERNAME" = true ]
-    then 
-      parameteru="$var"
-      NEXTISUSERNAME=false
-      continue
-    fi
-
-    if [ "$NEXTISPASSWORD" = true ]
-    then 
-      parameterp="$var"
-      NEXTISPASSWORD=false
-      continue
-    fi
-
-    # if not a java2faas arg, append to our AWS arg string
-    parameterawsargs="$parameterawsargs $var"
-  done
-
-  echo "parameterawsargs: "
-  echo "$parameterawsargs"
-}
 
 
-# run function to assign vars parameteru, parameterp and parameterawsargs used below
-processArgs
+NEXTISUSERNAME=false
+NEXTISPASSWORD=false
+parameterawsargs=""
+for var in "$@"; do
+  if [ "$var" = '-u' ]
+  then
+    NEXTISUSERNAME=true
+    continue
+  fi
+
+  if [ "$var" = '-p' ]
+  then
+    NEXTISPASSWORD=true
+    continue
+  fi
+
+  if [ "$NEXTISUSERNAME" = true ]
+  then 
+    parameteru="$var"
+    NEXTISUSERNAME=false
+    continue
+  fi
+
+  if [ "$NEXTISPASSWORD" = true ]
+  then 
+    parameterp="$var"
+    NEXTISPASSWORD=false
+    continue
+  fi
+  # if not a java2faas arg, append to our AWS arg string
+  parameterawsargs="$parameterawsargs $var"
+done
 
 # Print note in case -u or -p are empty
 if [ -z "$parameteru" ] || [ -z "$parameterp" ]
