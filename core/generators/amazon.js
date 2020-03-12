@@ -51,6 +51,7 @@ public class Entry implements RequestHandler<${reqClassName}, ${resClassName}> {
   // TODO region flag
   // TODO login (u, p)
   // TODO if no u,p specified still try
+  // TODO shebang correct? really need bash (vs sh)
   'deploy.sh': function (cliArgs) {
     return {
       code: `
@@ -71,46 +72,45 @@ helpFunction()
    exit 1 # Exit script after printing help
 }
 
-while getopts "r:a:u::p::t::m::" opt
+getCleanedArgs()
+{
+  IGNORENEXT=false
+  SNIPPED=""
+  for var in "$@"; do
+      # - Ditch java2faas custom arguments AWS CLI should never see
+      # - Pass through AWS CLI args
+      if [ "$var" = '-u' ] || [ "$var" = '-p' ]
+      then
+        IGNORENEXT=true
+        continue
+      fi
+  
+      if [ "$IGNORENEXT" = true ]
+      then 
+        IGNORENEXT=false
+        continue
+      fi
+
+      SNIPPED="$SNIPPED $var"
+  done
+  
+  return "$SNIPPED"
+}
+
+
+while getopts "u::p::" opt
 do
    case "$opt" in
-      r ) parameterr="$OPTARG" ;;
-      a ) parametera="$OPTARG" ;;
       u ) parameteru="$OPTARG" ;;
       p ) parameterp="$OPTARG" ;;
-      t ) parametert="$OPTARG" ;;
-      m ) parameterm="$OPTARG" ;;
-      ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
+      h ) helpFunction
    esac
 done
 
-# Print helpFunction in case parameters are empty
-if [ -z "$parameterr" ] 
-then
-   echo "Specify -r [us-east-2|us-west-1 ...]";
-   exit 1
-fi
-
-# Print helpFunction in case parameters are empty
-if [ -z "$parametera" ] 
-then
-   echo "Specify -a IAM_ROLE_AMAZON_ARN";
-   exit 1
-fi
 
 
 gradle build
 cd ${path.join('build', 'distributions')}
-
-if [ -z "$parametert" ] 
-then 
-  echo "Info: -t TIMEOUT_SEC unspeficied. Using Amazon default.
-fi
-
-if [ -z "$parameterm" ] 
-then 
-  echo "Info: -m MEMORY_MB unspeficied. Using Amazon default.
-fi
 
 if [ -z "$parameteru" ] || [ -z "$parameterp" ]
 then
@@ -121,12 +121,10 @@ else
  AWS_ACCESS_KEY_ID="$parameteru" AWS_SECRET_ACCESS_KEY="$parameterp" aws ec2 describe-instances
 fi
 
-# Give aws the region flag only if user specified it
-[ -z "$parameterr" ] && REGIONSNIPPET="" || REGIONSNIPPET="--region $parameterr"
-[ -z "$parameterm" ] && MEMSNIPPET="" || MEMSNIPPET="--memory-size $parameterm"
-[ -z "$parametert" ] && TIMEOUTSNIPPET="" || TIMEOUTSNIPPET="--timeout $parametert"
 
-aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 --role $parametera $REGIONSNIPPET $MEMSNIPPET $TIMEOUTSNIPPET
+CLEANEDAMAZONARGS=getCleanedArgs()
+
+aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 $CLEANEDAMAZONARGS
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
@@ -152,21 +150,40 @@ helpFunction()
     exit 1 # Exit script after printing help
 }
 
-while getopts "r::u::p::" opt
+getCleanedArgs()
+{
+  IGNORENEXT=false
+  SNIPPED=""
+  for var in "$@"; do
+      # - Ditch java2faas custom arguments AWS CLI should never see
+      # - Pass through AWS CLI args
+      if [ "$var" = '-u' ] || [ "$var" = '-p' ]
+      then
+        IGNORENEXT=true
+        continue
+      fi
+  
+      if [ "$IGNORENEXT" = true ]
+      then 
+        IGNORENEXT=false
+        continue
+      fi
+
+      SNIPPED="$SNIPPED $var"
+  done
+  
+  return "$SNIPPED"
+}
+
+
+while getopts "u::p::" opt
 do
     case "$opt" in
-      r ) parameterr="$OPTARG" ;;
       u ) parameteru="$OPTARG" ;;
       p ) parameterp="$OPTARG" ;;
-      ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
+      h ) helpFunction
     esac
 done
-
-# Print note in case -r is empty
-if [ -z "$parameterr" ] 
-then
-   echo "Info: -r REGION unspecified. Using AWS account default.";
-fi
 
 # Print note in case -u or -p are empty
 if [ -z "$parameteru" ] || [ -z "$parameterp" ]
@@ -181,11 +198,9 @@ fi
 gradle build
 cd ${path.join('build', 'distributions')}
 
-# Give aws the region flag only if user specified it
+CLEANEDAMAZONARGS=getCleanedArgs()
 
-[ -z "$parameterr" ] && REGIONSNIPPET="" || REGIONSNIPPET="--region $parameterr"
-aws lambda update-function-code --function-name ${cliArgs['--name']} --zip-file fileb://amazon.zip $REGIONSNIPPET
-
+aws lambda update-function-code --function-name ${cliArgs['--name']} --zip-file fileb://amazon.zip $CLEANEDAMAZONARGS
       `,
       path: path.join(cliArgs['--path'], 'update.sh')
     }
