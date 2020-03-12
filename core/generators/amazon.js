@@ -72,42 +72,51 @@ helpFunction()
    exit 1 # Exit script after printing help
 }
 
-getCleanedArgs()
+# Assigns parameteru parameterp, parameterawsargs
+processArgs()
 {
-  IGNORENEXT=false
-  SNIPPED=""
-  for var in "$@"; do
-      # - Ditch java2faas custom arguments AWS CLI should never see
-      # - Pass through AWS CLI args
-      if [ "$var" = '-u' ] || [ "$var" = '-p' ]
-      then
-        IGNORENEXT=true
-        continue
-      fi
-  
-      if [ "$IGNORENEXT" = true ]
-      then 
-        IGNORENEXT=false
-        continue
-      fi
+  NEXTISUSERNAME=false
+  NEXTISPASSWORD=false
+  parameterawsargs=""
 
-      SNIPPED="$SNIPPED $var"
+  for var in "$@"; do
+    if [ "$var" = '-u' ]
+    then
+      NEXTISUSERNAME=true
+      continue
+    fi
+
+    if [ "$var" = '-p' ]
+    then
+      NEXTISPASSWORD=true
+      continue
+    fi
+
+    if [ "$NEXTISUSERNAME" = true ]
+    then 
+      parameteru="$var"
+      NEXTISUSERNAME=false
+      continue
+    fi
+
+    if [ "$NEXTISPASSWORD" = true ]
+    then 
+      parameterp="$var"
+      NEXTISPASSWORD=false
+      continue
+    fi
+
+    # if not a java2faas arg, append to our AWS arg string
+    parameterawsargs="$parameterawsargs $var"
   done
-  
-  getCleanedArgsRES="$SNIPPED"
+
+  echo "parameterawsargs: "
+  echo "$parameterawsargs"
 }
 
 
-while getopts "u::p::" opt
-do
-   case "$opt" in
-      u ) parameteru="$OPTARG" ;;
-      p ) parameterp="$OPTARG" ;;
-      h ) helpFunction
-   esac
-done
-
-
+# run function to assign vars parameteru, parameterp and parameterawsargs used below
+processArgs
 
 gradle build
 cd ${path.join('build', 'distributions')}
@@ -117,14 +126,11 @@ then
   echo "Info: -u AWS_SECRET_KEY_ID or -p AWS_SECRET_KEY or both unspecified. Proceeding without logging into AWS"
 else 
 # Login
-# !!! The prefix space below is important => so bash will not log command in history
+# ! The prefix space below is important => so bash will not log command in history
  AWS_ACCESS_KEY_ID="$parameteru" AWS_SECRET_ACCESS_KEY="$parameterp" aws ec2 describe-instances
 fi
 
-# run function, assigns result to getCleanedArgsRES (used below)
-getCleanedArgs
-
-aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 $getCleanedArgsRES
+aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 $paramterawsargs
       `,
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
@@ -150,39 +156,51 @@ helpFunction()
     exit 1 # Exit script after printing help
 }
 
-getCleanedArgs()
+# Assigns parameteru parameterp, parameterawsargs
+processArgs()
 {
-  IGNORENEXT=false
-  SNIPPED=""
-  for var in "$@"; do
-      # - Ditch java2faas custom arguments AWS CLI should never see
-      # - Pass through AWS CLI args
-      if [ "$var" = '-u' ] || [ "$var" = '-p' ]
-      then
-        IGNORENEXT=true
-        continue
-      fi
-  
-      if [ "$IGNORENEXT" = true ]
-      then 
-        IGNORENEXT=false
-        continue
-      fi
+  NEXTISUSERNAME=false
+  NEXTISPASSWORD=false
+  parameterawsargs=""
 
-      SNIPPED="$SNIPPED $var"
+  for var in "$@"; do
+    if [ "$var" = '-u' ]
+    then
+      NEXTISUSERNAME=true
+      continue
+    fi
+
+    if [ "$var" = '-p' ]
+    then
+      NEXTISPASSWORD=true
+      continue
+    fi
+
+    if [ "$NEXTISUSERNAME" = true ]
+    then 
+      parameteru="$var"
+      NEXTISUSERNAME=false
+      continue
+    fi
+
+    if [ "$NEXTISPASSWORD" = true ]
+    then 
+      parameterp="$var"
+      NEXTISPASSWORD=false
+      continue
+    fi
+
+    # if not a java2faas arg, append to our AWS arg string
+    parameterawsargs="$parameterawsargs $var"
   done
-  getCleanedArgsRES="$SNIPPED"
+
+  echo "parameterawsargs: "
+  echo "$parameterawsargs"
 }
 
 
-while getopts "u::p::" opt
-do
-    case "$opt" in
-      u ) parameteru="$OPTARG" ;;
-      p ) parameterp="$OPTARG" ;;
-      h ) helpFunction
-    esac
-done
+# run function to assign vars parameteru, parameterp and parameterawsargs used below
+processArgs
 
 # Print note in case -u or -p are empty
 if [ -z "$parameteru" ] || [ -z "$parameterp" ]
@@ -190,16 +208,14 @@ then
     echo "Info: -u AWS_SECRET_KEY_ID or -p AWS_SECRET_KEY or both unspecified. Proceeding without logging into AWS";
 else 
 # Login
-# !!! The prefix space below is important => so bash will not log command in history
+# ! The prefix space below is important => so bash will not log command in history
  AWS_ACCESS_KEY_ID="$parameteru" AWS_SECRET_ACCESS_KEY="$parameterp" aws ec2 describe-instances
 fi
 
 gradle build
 cd ${path.join('build', 'distributions')}
 
-getCleanedArgs
-
-aws lambda update-function-code --function-name ${cliArgs['--name']} --zip-file fileb://amazon.zip $getCleanedArgsRES
+aws lambda update-function-code --function-name ${cliArgs['--name']} --zip-file fileb://amazon.zip $parameterawsargs
       `,
       path: path.join(cliArgs['--path'], 'update.sh')
     }
