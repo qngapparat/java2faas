@@ -29,7 +29,7 @@ $ java2faas OPTIONS...
 
 ```shell
 cd amazon
-sh deploy.sh --region eu2 # afterwards, `sh update.sh`
+sh deploy.sh --region AWS_REGION_NAME [OPTIONAL_AWS_CLI_ARGS]... # afterwards, `sh update.sh`
 
 ```
 
@@ -37,7 +37,7 @@ sh deploy.sh --region eu2 # afterwards, `sh update.sh`
 
 ```shell
 cd ibm
-sh deploy.sh # afterwards, `sh update.sh`
+sh deploy.sh -u IBM_UNAME -p IBM_PASSWORD -R IBM_RESOURCE_GROUP -r IBM_REGION -o IBM_ORG -s IBM_SPACE # afterwards, `sh update.sh`
 ```
 
 

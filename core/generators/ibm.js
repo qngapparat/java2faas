@@ -108,7 +108,7 @@ ibmcloud fn action create ${cliArgs['--name']} ibm.jar --kind java:8 --main ${ge
       path: path.join(cliArgs['--path'], 'deploy.sh')
     }
   },
-
+  // TODO note that new regions will need a org, space otherwise deploy fails
   'update.sh': function (cliArgs) {
     return {
       code: `
@@ -153,6 +153,7 @@ fi
 
 gradle jar || exit 1
 
+ibmcloud config --check-version=false
 ibmcloud login -u "$parameteru" -p "$parameterp" -g "$parameterR"
 ibmcloud target -r "$parameterr"
 ibmcloud target -o "$parametero" -s "$parameters"
