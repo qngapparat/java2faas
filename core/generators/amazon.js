@@ -17,10 +17,10 @@ const generators = {
     const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
     const reqClassName = cliArgs['--request-file']
       ? cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
-      : 'Request.java' // default
+      : 'Request' // default
     const resClassName = cliArgs['--response-file']
       ? cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
-      : 'Response.java' // default
+      : 'Response' // default
 
     // usually src/main/java
     const buildPath = getBuildPath(cliArgs)
