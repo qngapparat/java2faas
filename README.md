@@ -15,10 +15,10 @@ $ java2faas OPTIONS...
   Options
     --path YOURAPPDIR 
     --name FUNCTIONNAME 
-    --entry-file FNAME 
+    --entry-file FPATH 
     --entry-method MNAME # Name of method inside entry-file
-    --request-file FNAME # Java file describing function input
-    --response-file FNAME # Java file describing function output
+    [--request-file FPATH] # Java file describing function input. Default is 'Request.java'
+    [--response-file FPATH] # Java file describing function output. Default is 'Response.java'
 ```
 
 `java2faas` will transpile your Java code, and put it into the newly created directories `amazon` and `ibm`, respectively.
@@ -136,9 +136,9 @@ java2faas
     --name myFirstFn 
     --entry-file src/main/java/Hello.java 
     --entry-method hello
-    --request-file src/main/java/Request.java
-    --response-file src/main/java/Response.java
 ```
+
+Note: You don't have to name your files `Request.java` and `Response.java`. You can specify `--request-file FPATH` and/or `--response-file FPATH` instead.
 
 ```
 ├── amazon

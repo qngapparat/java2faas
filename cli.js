@@ -26,14 +26,12 @@ if (args['--entry-file'] == null) {
 
 if (args['--request-file'] == null) {
   // ie src/main/java/Hello.java
-  console.log('Specify --request-file')
-  process.exit()
+  console.log('--request-file unspecified. Using default Request.java')
 }
 
 if (args['--response-file'] == null) {
   // ie src/main/java/Hello.java
-  console.log('Specify --response-file')
-  process.exit()
+  console.log('--request-file unspecified. Using default Request.java')
 }
 
 if (args['--entry-method'] == null) {

@@ -15,12 +15,16 @@ const generators = {
   'Entry.java': function (cliArgs) {
     // TODO improve this (??)
     const className = cliArgs['--entry-file'].split(path.sep).slice(-1)[0].split('.')[0]
-    const reqClassName = cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
-    const resClassName = cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
+    const reqClassName = cliArgs['--request-file']
+      ? cliArgs['--request-file'].split(path.sep).slice(-1)[0].split('.')[0]
+      : 'Request.java' // default
+    const resClassName = cliArgs['--response-file']
+      ? cliArgs['--response-file'].split(path.sep).slice(-1)[0].split('.')[0]
+      : 'Response.java' // default
 
     // usually src/main/java
     const buildPath = getBuildPath(cliArgs)
-    // compute 'package ... ' codeline
+    // compute 'package ... ' java codeline
     const packageName = getPackageName(cliArgs)
     let packageCodeLine = ''
     if (packageName) {
