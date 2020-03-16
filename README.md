@@ -43,7 +43,7 @@ These can be ommitted if you name the files accordingly, and place them with `--
 
 ```shell
 cd amazon
-sh deploy.sh --region AWS_REGION_NAME [OPTIONAL_AWS_CLI_ARGS]... # afterwards, `sh update.sh`
+sh deploy.sh -u AWS_SECRET_KEY_ID -p AWS_SECRET_KEY --region AWS_REGION_NAME [OPTIONAL_AWS_CLI_ARGS]... # afterwards, `sh update.sh`
 
 ```
 
@@ -175,11 +175,11 @@ Note: You don't have to name your files `Request.java` and `Response.java`. You 
 
 ```
 cd amazon
-sh deploy.sh
+sh deploy.sh -u AWS_SECRET_KEY_ID -p AWS_SECRET_KEY --region us-east-2
 # --
 
 cd ibm
-sh deploy.sh
+sh deploy.sh -u IBM_UNAME -p IBM_PASSW -R Default -r eu-gb -o IBM_ORG -s IBM_SPACE
 ```
 
 ## Misc
