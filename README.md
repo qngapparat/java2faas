@@ -152,7 +152,7 @@ java2faas
     --entry-method hello
 ```
 
-Note: You don't have to name your files `Request.java` and `Response.java`. You can specify `--request-file FPATH` and/or `--response-file FPATH` instead.
+Note: If you don't name your files `Request.java` and `Response.java`, just specify `--request-file FPATH` and/or `--response-file FPATH` instead.
 
 ```
 ├── amazon
