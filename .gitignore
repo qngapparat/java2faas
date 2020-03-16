@@ -11,3 +11,5 @@ node_modules
 build/distributions/java2faas.zip
 build/libs/java2faas.jar
 build/tmp/jar/MANIFEST.MF
+/coverage
+.project
