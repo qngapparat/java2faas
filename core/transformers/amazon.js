@@ -83,7 +83,7 @@ build.dependsOn buildZip
 
     return {
       code: code,
-      path: path.join(cliArgs['--path'], 'build.gradle')
+      path: 'build.gradle'
     }
   }
 }

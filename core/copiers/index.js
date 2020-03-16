@@ -10,7 +10,9 @@ const fse = require('fs-extra')
 function copy (srcDir, destDir, except = []) {
   if (fs.existsSync(srcDir) === false) throw new Error(`Cannot copy. Source dir ${srcDir} does not exist`)
   if (fs.existsSync(destDir) === false) throw new Error(`Cannot copy. Dest dir ${destDir} does not exist`)
-
+  // cannot copy destdir into itself
+  except = [...except, destDir]
+  // All filenames \ { except }
   const fns = fs.readdirSync(srcDir)
     .filter(fn => except.includes(fn) === false)
 

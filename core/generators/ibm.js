@@ -105,7 +105,7 @@ ibmcloud target -o "$parametero" -s "$parameters"
 cd ${path.join('build', 'libs')}
 ibmcloud fn action create ${cliArgs['--name']} ibm.jar --kind java:8 --main ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry
 `,
-      path: path.join(cliArgs['--path'], 'deploy.sh')
+      path: 'deploy.sh'
     }
   },
   // TODO note that new regions will need a org, space otherwise deploy fails
@@ -161,7 +161,7 @@ ibmcloud target -o "$parametero" -s "$parameters"
 cd ${path.join('build', 'libs')}
 ibmcloud fn action update ${cliArgs['--name']} ibm.jar --kind java:8 --main ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry
       `,
-      path: path.join(cliArgs['--path'], 'update.sh')
+      path: 'update.sh'
     }
   }
 }

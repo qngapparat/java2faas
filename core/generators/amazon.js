@@ -123,7 +123,7 @@ fi
 
 aws lambda create-function --function-name ${cliArgs['--name']} --handler ${getPackageName(cliArgs)}${getPackageName(cliArgs) ? '.' : ''}Entry::handleRequest --zip-file fileb://amazon.zip --runtime java8 $parameterawsargs
       `,
-      path: path.join(cliArgs['--path'], 'deploy.sh')
+      path: 'deploy.sh'
     }
   },
 
@@ -199,7 +199,7 @@ cd ${path.join('build', 'distributions')}
 
 aws lambda update-function-code --function-name ${cliArgs['--name']} --zip-file fileb://amazon.zip $parameterawsargs
       `,
-      path: path.join(cliArgs['--path'], 'update.sh')
+      path: 'update.sh'
     }
   }
 }
