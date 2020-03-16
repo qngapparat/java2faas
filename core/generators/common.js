@@ -47,26 +47,24 @@ function getPackageName (cliArgs) {
  */
 function getBuildPath (cliArgs) {
   let buildPath
-  const packageName = getPackageName(cliArgs)
+  // const packageName = getPackageName(cliArgs)
 
-  if (packageName) {
-    buildPath = path.join(
-      ...cliArgs['--entry-file']
-        .split(path.sep)
-        .slice(0, -1) // remove 'Hello.java'
-        .join('.')
-        .replace(packageName, '') // remove 'com.example'
-        .split('.')
-        .filter(dir => dir != null && dir.trim() !== '')
+  // TODO Assumes entry-file is directly in buildPath (not in some nested folder)
+  // TODO always the case??
+
+  // TODO does this work with packages still??
+
+  buildPath = path.join(
+    ...path.relative(
+      cliArgs['--path'],
+      cliArgs['--entry-file']
     )
-    console.log(`Computed Java build path: ${buildPath}`)
-    return buildPath
-  } else {
-    // if user uses default package
-    // => just place Entry.java in same flat directory with all the other .java files
-    buildPath = path.join(...cliArgs['--entry-file'].split(path.sep).slice(0, -1))
-    return buildPath
-  }
+      .split(path.sep)
+      .slice(0, -1) // remove 'Hello.java' (or similar)
+  )
+  console.log('COMPUTED:', buildPath, '\n\n\n')
+  process.stdout.write(`Computed Java build path: ${buildPath}`)
+  return buildPath
 }
 
 module.exports = {
