@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const uuidv4 = require('uuid').v4
 const { execSync } = require('child_process')
-const { transformAll } = require('./amazon')
+const { transformAll } = require('./ibm')
 // run before each test
 let runuuid
 
@@ -10,7 +10,7 @@ beforeEach(() => {
   runuuid = uuidv4()
   // setup mock fs
   fs.mkdirSync(`/tmp/${runuuid}`)
-  fs.mkdirSync(`/tmp/${runuuid}/amazon`)
+  fs.mkdirSync(`/tmp/${runuuid}/ibm`)
   fs.writeFileSync(`/tmp/${runuuid}/build.gradle`, `
 apply plugin: 'java'
 
@@ -30,6 +30,9 @@ dependencies {
 
 // run after each test
 afterEach(() => {
+  if (runuuid) {
+    execSync(`rm -rf /tmp/${runuuid}`)
+  }
   runuuid = null
 })
 
@@ -42,7 +45,6 @@ describe('Transformers', () => {
     // })
 
     test('builds after java2faas transformer', () => {
-      // fs.mkdirSync('amazon')
       const mockCliArgs = {
         '--path': `/tmp/${runuuid}`
       }
@@ -50,9 +52,9 @@ describe('Transformers', () => {
       // fs.writeFileSync(t.path.split(path.sep).slice(-1), t.code)
       // write transformed files
       const transformed = transformAll(mockCliArgs)
-      transformed.forEach(t => fs.writeFileSync(path.join(mockCliArgs['--path'], 'amazon', t.path), t.code)
+      transformed.forEach(t => fs.writeFileSync(path.join(mockCliArgs['--path'], 'ibm', t.path), t.code)
       )
-      const fn = jest.fn(() => execSync(`gradle build -b /tmp/${runuuid}/amazon/build.gradle`))
+      const fn = jest.fn(() => execSync(`gradle build -b /tmp/${runuuid}/ibm/build.gradle`))
       fn()
       expect(fn).toHaveReturned()
     })
@@ -66,9 +68,9 @@ describe('Transformers', () => {
       fs.writeFileSync(`/tmp/${runuuid}/build.gradle`, ' ')
 
       const transformed = transformAll(mockCliArgs)
-      transformed.forEach(t => fs.writeFileSync(path.join(mockCliArgs['--path'], 'amazon', t.path), t.code)
+      transformed.forEach(t => fs.writeFileSync(path.join(mockCliArgs['--path'], 'ibm', t.path), t.code)
       )
-      const fn = jest.fn(() => execSync(`gradle build -b /tmp/${runuuid}/amazon/build.gradle`))
+      const fn = jest.fn(() => execSync(`gradle build -b /tmp/${runuuid}/ibm/build.gradle`))
       fn()
       expect(fn).toHaveReturned()
     })
@@ -82,9 +84,9 @@ describe('Transformers', () => {
       fs.writeFileSync(`/tmp/${runuuid}/build.gradle`, ' INVALID BUILD GRADLE CONTENT\n ')
 
       const transformed = transformAll(mockCliArgs)
-      transformed.forEach(t => fs.writeFileSync(path.join(mockCliArgs['--path'], 'amazon', t.path), t.code)
+      transformed.forEach(t => fs.writeFileSync(path.join(mockCliArgs['--path'], 'ibm', t.path), t.code)
       )
-      expect(() => execSync(`gradle build -b /tmp/${runuuid}/amazon/build.gradle`))
+      expect(() => execSync(`gradle build -b /tmp/${runuuid}/ibm/build.gradle`))
         .toThrow()
     })
   })
