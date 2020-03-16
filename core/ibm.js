@@ -28,4 +28,4 @@ function ibm (cliArgs) {
   transformed.forEach(t => fs.writeFileSync(path.join(cliArgs['--path'], 'ibm', t.path), t.code))
 }
 
-module.exports = ibm
+module.exports = { ibm }

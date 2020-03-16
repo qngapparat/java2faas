@@ -28,4 +28,4 @@ function amazon (cliArgs) {
   transformed.forEach(t => fs.writeFileSync(path.join(cliArgs['--path'], 'amazon', t.path), t.code))
 }
 
-module.exports = amazon
+module.exports = { amazon }

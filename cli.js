@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const amazon = require('./core/amazon')
-const ibm = require('./core/ibm')
+const { amazon } = require('./core/amazon')
+const { ibm } = require('./core/ibm')
 
 const arg = require('arg')
 
