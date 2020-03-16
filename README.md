@@ -16,10 +16,24 @@ $ java2faas OPTIONS...
     --path YOURAPPDIR 
     --name FUNCTIONNAME 
     --entry-file FPATH 
-    --entry-method MNAME # Name of method inside entry-file
-    [--request-file FPATH] # Java file describing function input. Default is 'Request.java'
-    [--response-file FPATH] # Java file describing function output. Default is 'Response.java'
+    --entry-method MNAME 
+    [--request-file FPATH] 
+    [--response-file FPATH]
 ```
+
+* `--path` is the path to the root of your Java project. 
+* `--name` (alphanumeric) is the name your FaaS function will have in your AWS / IBM console.
+* `--entry-file` should point to the Java file containing your Entry method.
+* `--entry-method` The method name you want to run inside `--entry-file`.
+
+**Optional**
+
+These can be ommitted if you name the files accordingly, and place them with `--entry-file`.
+
+* `--request-file` (defaults to `Response.java`) should point to the class that describes your Input payload. 
+* `--response-file` (defaults to `Response.java`) should point to the class that describes your Output payload.
+
+---
 
 `java2faas` will transpile your Java code, and put it into the newly created directories `amazon` and `ibm`, respectively.
 
