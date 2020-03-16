@@ -62,7 +62,6 @@ function getBuildPath (cliArgs) {
       .split(path.sep)
       .slice(0, -1) // remove 'Hello.java' (or similar)
   )
-  console.log('COMPUTED:', buildPath, '\n\n\n')
   process.stdout.write(`Computed Java build path: ${buildPath}`)
   return buildPath
 }

@@ -1,11 +1,11 @@
-const { amazon } = require('./amazon')
+const { ibm } = require('./ibm')
 const uuidv4 = require('uuid').v4
 const path = require('path')
 const fs = require('fs')
 const { execSync } = require('child_process')
 let runuuid
 
-describe('top-level amazon comp | default package', () => {
+describe('top-level ibm comp | default package', () => {
   beforeEach(() => {
     runuuid = uuidv4()
     fs.mkdirSync(`/tmp/${runuuid}`)
@@ -86,9 +86,9 @@ public class Response {
       '--name': 'cloudfname123'
     }
 
-    amazon(mockCliArgs)
+    ibm(mockCliArgs)
 
-    const fn = jest.fn(() => execSync(`gradle build -b /tmp/${runuuid}/amazon/build.gradle`))
+    const fn = jest.fn(() => execSync(`gradle build -b /tmp/${runuuid}/ibm/build.gradle`))
     fn()
     expect(fn).toHaveReturned()
   })
@@ -127,15 +127,15 @@ public class Response {
     fs.unlinkSync(`/tmp/${runuuid}/src/main/java/Request.java`)
 
     // See if it still works
-    amazon(mockCliArgs)
+    ibm(mockCliArgs)
 
-    const fn = jest.fn(() => execSync(`gradle build -b /tmp/${runuuid}/amazon/build.gradle`))
+    const fn = jest.fn(() => execSync(`gradle build -b /tmp/${runuuid}/ibm/build.gradle`))
     fn()
     expect(fn).toHaveReturned()
   })
 })
 
-describe('top-level amazon comp | example package', () => {
+describe('top-level ibm comp | example package', () => {
   beforeEach(() => {
     runuuid = uuidv4()
     fs.mkdirSync(`/tmp/${runuuid}`)
@@ -245,9 +245,9 @@ public class Response {
     fs.unlinkSync(`/tmp/${runuuid}/src/main/java/example/Request.java`)
 
     // See if it still works
-    amazon(mockCliArgs)
+    ibm(mockCliArgs)
 
-    const fn = jest.fn(() => execSync(`gradle build -b /tmp/${runuuid}/amazon/build.gradle`))
+    const fn = jest.fn(() => execSync(`gradle build -b /tmp/${runuuid}/ibm/build.gradle`))
     fn()
     expect(fn).toHaveReturned()
   })
