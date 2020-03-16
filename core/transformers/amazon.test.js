@@ -41,7 +41,7 @@ describe('Transformers', () => {
     //   expect(fn).toHaveReturned()
     // })
 
-    test('builds after java2faas transformer', () => {
+    test('builds after java2faas transformer | valid prevCode', () => {
       // fs.mkdirSync('amazon')
       const mockCliArgs = {
         '--path': `/tmp/${runuuid}`
