@@ -30,7 +30,7 @@ $ java2faas OPTIONS...
 
 These can be ommitted if you name the files accordingly, and place them with `--entry-file`.
 
-* `--request-file` (defaults to `Response.java`) should point to the class that describes your Input payload. 
+* `--request-file` (defaults to `Request.java`) should point to the class that describes your Input payload. 
 * `--response-file` (defaults to `Response.java`) should point to the class that describes your Output payload.
 
 ---
