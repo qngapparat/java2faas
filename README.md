@@ -39,6 +39,8 @@ These can be ommitted if you name the files accordingly, and place them with `--
 
 `java2faas` will transpile your Java code, and put it into the newly created directories `amazon` and `ibm`, respectively.
 
+Dependencies with Maven (`pom.xml`) are supported and automatically included.
+
 ## Deploy your code
 
 ### To Amazon Lambda
@@ -53,8 +55,13 @@ sh deploy.sh # afterwards, `sh update.sh`
 
 ```shell
 cd ibm
-sh deploy.sh -u IBM_UNAME -p IBM_PASSWORD -R IBM_RESOURCE_GROUP -r IBM_REGION -o IBM_ORG -s IBM_SPACE # afterwards, `sh update.sh`
+sh deploy.sh # afterwards, `sh update.sh`
 ```
+
+## Tips
+
+* Maven is supported. You can specify something inside `pom.xml` (Dependencies...) and use it in your function.
+* The functions will run on Java 8, on both Amazon and IBMs
 
 
 ## Example
@@ -162,12 +169,12 @@ Note: If you don't name your files `Request.java` and `Response.java`, just spec
 │   ├── pom.xml
 │   ├── deploy.sh
 │   ├── update.sh
-│   └── src/main/java
+│   └── src/main/java 
 ├── ibm
-│   ├── build.gradle
+│   ├── pom.xml
 │   ├── deploy.sh
 │   ├── update.sh
-│   └── src/main/java
+│   └── src/main/java 
 └── src
     └── main
         └── java
@@ -176,20 +183,18 @@ Note: If you don't name your files `Request.java` and `Response.java`, just spec
 
 **Deploy the function**
 
+Note: Make sure you are logged into the respective Provider CLI tool when you deploy (`aws`, `ibmcloud`)
+
 ```
 cd amazon
 sh deploy.sh 
 # --
 
 cd ibm
-sh deploy.sh -u IBM_UNAME -p IBM_PASSW -R Default -r eu-gb -o IBM_ORG -s IBM_SPACE
+sh deploy.sh
 ```
 
-## Misc
 
-* Amazon supports only Maven. IBM supports only Gradle (TODO => maven)
-* (((You can use dependencies just like before. Make sure you name it `build.gradle`.)))
-* Java 8 is used // TODO use latest per platform
 ## Licence
 
 MIT
