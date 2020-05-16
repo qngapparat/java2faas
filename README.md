@@ -17,6 +17,7 @@ $ java2faas OPTIONS...
     --name FUNCTIONNAME 
     --entry-file FPATH 
     --entry-method MNAME 
+    --aws-role AWSROLEARN
     [--request-file FPATH] 
     [--response-file FPATH]
 ```
@@ -25,6 +26,7 @@ $ java2faas OPTIONS...
 * `--name` (alphanumeric) is the name your FaaS function will have in your AWS / IBM console.
 * `--entry-file` should point to the Java file containing your Entry method.
 * `--entry-method` The method name you want to run inside `--entry-file`.
+* `--aws-role` The ARN of the Amazon IAM role your Lambda should have
 
 **Optional**
 
@@ -43,7 +45,7 @@ These can be ommitted if you name the files accordingly, and place them with `--
 
 ```shell
 cd amazon
-sh deploy.sh -u AWS_SECRET_KEY_ID -p AWS_SECRET_KEY --region AWS_REGION_NAME [OPTIONAL_AWS_CLI_ARGS]... # afterwards, `sh update.sh`
+sh deploy.sh # afterwards, `sh update.sh`
 
 ```
 
@@ -150,13 +152,14 @@ java2faas
     --name myFirstFn 
     --entry-file src/main/java/Hello.java 
     --entry-method hello
+    --aws-role xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 Note: If you don't name your files `Request.java` and `Response.java`, just specify `--request-file FPATH` and/or `--response-file FPATH` instead.
 
 ```
 ├── amazon
-│   ├── build.gradle
+│   ├── pom.xml
 │   ├── deploy.sh
 │   ├── update.sh
 │   └── src/main/java
@@ -175,7 +178,7 @@ Note: If you don't name your files `Request.java` and `Response.java`, just spec
 
 ```
 cd amazon
-sh deploy.sh -u AWS_SECRET_KEY_ID -p AWS_SECRET_KEY --region us-east-2
+sh deploy.sh 
 # --
 
 cd ibm
@@ -184,8 +187,8 @@ sh deploy.sh -u IBM_UNAME -p IBM_PASSW -R Default -r eu-gb -o IBM_ORG -s IBM_SPA
 
 ## Misc
 
-* Only Gradle is supported as build system
-* You can use dependencies just like before. Make sure you name it `build.gradle`.
+* Amazon supports only Maven. IBM supports only Gradle (TODO => maven)
+* (((You can use dependencies just like before. Make sure you name it `build.gradle`.)))
 * Java 8 is used // TODO use latest per platform
 ## Licence
 

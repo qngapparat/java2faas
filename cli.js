@@ -10,7 +10,8 @@ const args = arg({
   '--request-file': String,
   '--response-file': String,
   '--entry-method': String,
-  '--name': String
+  '--name': String,
+  '--aws-role': String
 })
 
 if (args['--path'] == null) {
@@ -47,6 +48,11 @@ if (args['--name'] == null) {
 
 if (args['--name'].match(/^[a-zA-Z0-9]+$/) === false) {
   console.log('--name must be alphanumeric (a-z A-Z 0-9)')
+}
+
+if (args['--aws-role'] == null) {
+  console.log('Specify --aws-role AWSROLEARN')
+  process.exit()
 }
 
 amazon(args)

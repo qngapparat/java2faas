@@ -9,32 +9,36 @@ const xmltojs = (str) => XML2Js(str, { attributeNamePrefix: '0_', ignoreAttribut
 // TODO don't copy hiddendirs
 
 // The stuff we'll write to the pom, as JS objects
-const DEPS = [
-  { artifactId: 'aws-lambda-java-core', groupId: 'com.amazonaws', version: '1.2.0' },
-  { artifactId: 'aws-lambda-java-events', groupId: 'com.amazonaws', version: '2.2.7' },
-  { artifactId: 'aws-lambda-java-core', groupId: 'com.amazonaws', version: '1.1.0' }
-]
+const DEPS = {
+  dependency: [
+    { artifactId: 'aws-lambda-java-core', groupId: 'com.amazonaws', version: '1.2.0' },
+    { artifactId: 'aws-lambda-java-events', groupId: 'com.amazonaws', version: '2.2.7' },
+    { artifactId: 'aws-lambda-java-log4j2', groupId: 'com.amazonaws', version: '1.1.0' }
+  ]
+}
 
-const PLUGS = [
-  {
-    groupId: 'org.apache.maven.plugins',
-    artifactId: 'maven-shade-plugin',
-    version: '3.2.2',
-    configuration: {
-      createDependencyReducedPom: false
-    },
-    executions: {
-      execution: [
-        {
-          phase: 'package',
-          goals: {
-            goal: 'shade'
+const PLUGS = {
+  plugin: [
+    {
+      groupId: 'org.apache.maven.plugins',
+      artifactId: 'maven-shade-plugin',
+      version: '3.2.2',
+      configuration: {
+        createDependencyReducedPom: false
+      },
+      executions: {
+        execution: [
+          {
+            phase: 'package',
+            goals: {
+              goal: 'shade'
+            }
           }
-        }
-      ]
+        ]
+      }
     }
-  }
-]
+  ]
+}
 
 // TODO remove apply application/eclipse ??
 // TODO or is the programmer assumed to not write that there??
@@ -63,13 +67,13 @@ const transformers = {
           
           </dependencies>
         
-          <pluginManagement>
+          <build>
             <plugins>
             
             ${jstoxml.parse(PLUGS)}
     
             </plugins>
-          </pluginManageMent>
+          </build>
         </project>`,
         path: 'pom.xml'
       }
@@ -85,8 +89,8 @@ const transformers = {
       c.project.dependencies = { dependency: [] }
     }
 
-    if (!c.project.pluginManagement || !c.project.pluginManagement.plugins || !c.project.pluginManagement.plugins.plugin) {
-      c.project.pluginManagement = {
+    if (!c.project.build || !c.project.build.plugins || !c.project.build.plugins.plugin) {
+      c.project.build = {
         plugins: {
           plugin: []
         }
@@ -95,7 +99,11 @@ const transformers = {
 
     // pour deps and plugins down into that nesting (appending it; not overwriting user stuff)
     c.project.dependencies.dependency.push(...DEPS)
-    c.project.pluginManagement.plugins.plugin.push(...PLUGS)
+    c.project.build.plugins.plugin.push(...PLUGS)
+
+    // set artifact id and version (because deploy.sh then expects my-lambda-1.0.jar)
+    c.project.artifactId = 'my-lambda'
+    c.project.version = '1.0'
 
     // back to XML
     const cxml = jstoxml(c)
