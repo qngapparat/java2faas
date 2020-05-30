@@ -4,7 +4,7 @@ const Js2XML = require('fast-xml-parser').j2xParser
 const XML2Js = require('fast-xml-parser')
 // convenience wrappers
 const jstoxml = new Js2XML({ attributeNamePrefix: '0_', ignoreAttributes: false })
-const xmltojs = (str) => XML2Js(str, { attributeNamePrefix: '0_', ignoreAttributes: false })
+const xmltojs = (str) => XML2Js.parse(str, { attributeNamePrefix: '0_', ignoreAttributes: false })
 
 // TODO don't copy hiddendirs
 
