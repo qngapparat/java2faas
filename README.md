@@ -2,6 +2,8 @@
 
 Transpiler to run your Java code on both Amazon & IBM FaaS
 
+[GitHub](https://github.com/qngapparat/java2faas)
+
 ## Install
 ```shell
 npm i java2faas -g
