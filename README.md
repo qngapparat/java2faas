@@ -195,6 +195,9 @@ sh deploy.sh
 cd ibm
 sh deploy.sh
 ```
+## Known Bugs
+
+Invoke `js2faas` in your project root directory, so you can do `--path .`. This avoids some annoying edge cases.
 
 
 ## Licence
